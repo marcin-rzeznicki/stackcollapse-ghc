@@ -19,7 +19,8 @@
 {-# LANGUAGE ExistentialQuantification #-}
 
 module StackCollapse
-    ( StackCollapse(..)
+    ( MayFail
+    , StackCollapse(..)
     , collapseStack
     , stackCollapseFromPath
     , stackCollapseFromConfig) where
