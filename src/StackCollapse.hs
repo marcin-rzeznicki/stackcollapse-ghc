@@ -39,7 +39,7 @@ import           Data.Text.Encoding (encodeUtf8Builder)
 import           Data.List (intersperse)
 import           Data.Functor.Foldable
 import           Data.Functor ((<&>))
-import           Control.Applicative (liftA2)
+import           Control.Applicative (liftA2, liftA3)
 
 data StackCollapse = forall p. Profile p
   => StackCollapse { profile :: p
@@ -101,9 +101,13 @@ frameBuilder config =
         let builder = (char7 ' ' <>) . bracket . encodeUtf8Builder . source
         in case sourceMode config of
              SourceNever  -> const mempty
-             SourceAlways -> builder <?> hasLocation
+             SourceAlways -> builder <?> liftA2 (&&) hasLocation (not . isCAF)
              SourceUser   -> builder
-               <?> liftA2 (&&) hasLocation (isUserTrace config)
+               <?> liftA3
+                 (\a b c -> a && b && c)
+                 hasLocation
+                 (not . isCAF)
+                 (isUserTrace config)
       optModule = let builder = (<> char7 '.') . encodeUtf8Builder . modul
                   in case functionNameMode config of
                        QualifiedNever  -> const mempty
