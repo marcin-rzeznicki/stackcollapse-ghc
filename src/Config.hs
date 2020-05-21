@@ -39,7 +39,7 @@ data StackCollapseConfig =
          }
 
 defaultConfig :: StackCollapseConfig
-defaultConfig = Config { userModules = []
+defaultConfig = Config { userModules = [userModule_Main]
                        , sourceMode = SourceNever
                        , functionNameMode = QualifiedKernel
                        , operationMode = Time
@@ -68,7 +68,7 @@ data AnnotationMode = NoAnnotations
   deriving stock (Eq)
 
 prependUserModule :: StackCollapseConfig -> UserModule -> StackCollapseConfig
-prependUserModule config @ Config { userModules } modu =
+prependUserModule config@Config { userModules } modu =
   config { userModules = modu:userModules }
 
 
