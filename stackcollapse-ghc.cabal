@@ -12,6 +12,7 @@ maintainer:          Marcin Rzeźnicki <marcin.rzeznicki@gmail.com>
 copyright:           2020 Marcin Rzeźnicki
 category:            Profiling
 build-type:          Simple
+extra-source-files:  test/prof_files/*.prof
 extra-doc-files:     README.md
                      CHANGELOG.md
 tested-with:         GHC == 8.6.5
@@ -78,8 +79,11 @@ test-suite stackcollapse-ghc-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
+  other-modules:       Helpers
   build-depends:       hspec-golden ==0.1.0.1,
-                       hspec
+                       hspec,
+                       utf8-string ^>=1.0.1,
+                       extra
   ghc-options:         -threaded
                        -rtsopts
                        -with-rtsopts=-N

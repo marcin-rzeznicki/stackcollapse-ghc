@@ -14,7 +14,14 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -}
-module UserModule (UserModule, parseUserModule, inAnyUserModule) where
+{-# LANGUAGE DerivingStrategies #-}
+
+module UserModule
+    ( UserModule
+    , parseUserModule
+    , userModule_Main
+    , inAnyUserModule
+    , toString) where
 
 import           Trace
 import           Data.Text (Text)
@@ -24,6 +31,7 @@ import           Data.Maybe (listToMaybe)
 import           Data.Coerce
 
 newtype UserModule = UserModule Text
+  deriving stock (Eq)
 
 parseUserModule :: String -> Either String UserModule
 parseUserModule string
@@ -40,6 +48,12 @@ parseUserModule string
 
     endsWithDot = last string == '.'
 
+userModule_Main :: UserModule
+userModule_Main = UserModule $ T.pack "Main"
+
 inAnyUserModule :: [UserModule] -> Trace -> Bool
 inAnyUserModule = inAnyModule . coerce
+
+toString :: UserModule -> String
+toString (UserModule t) = T.unpack t
 
