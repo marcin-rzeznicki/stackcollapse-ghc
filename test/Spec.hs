@@ -36,6 +36,18 @@ main = hspec
             `prependUserModule` userModuleFromString "Lesson11"
         , defaultConfig { operationMode = Alloc }
             `prependUserModule` userModuleFromString "Lesson11"]
+    context "standard prof"
+      $ withConfigs
+        "test2"
+        [ defaultConfig { inputType = Standard }
+            `prependUserModule` userModuleFromString "Lesson11"
+        , defaultConfig { inputType = Standard } { operationMode = Alloc }
+            `prependUserModule` userModuleFromString "Lesson11"]
+    context "unicode chars"
+      $ stackCollapseTest "test3"
+      $ defaultConfig { inputType = Standard
+                      , functionNameMode = QualifiedNever
+                      }
 
 withConfigs :: String -> [StackCollapseConfig] -> Spec
 withConfigs fileStem = mapM_ (stackCollapseTest fileStem)
