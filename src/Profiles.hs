@@ -78,9 +78,9 @@ instance Profile Standard where
         totalBytes
         [_cc, _module, _src, _, _, _indTime, _indAlloc, _inhTime, _inhAlloc] =
         let readTrace =
-              (\cc modul src indTime indAlloc
-               -> let ticks = round $ indTime * fromIntegral totalTicks
-                      alloc = round $ indAlloc * fromIntegral totalBytes
+              (\cc modul src indTime indAllc
+               -> let ticks = round $ indTime * (fromIntegral totalTicks / 100)
+                      alloc = round $ indAllc * (fromIntegral totalBytes / 100)
                   in Trace { cc, modul, src, ticks, alloc })
               <$> readCostCentre _cc
               <*> readText _module
