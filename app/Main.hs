@@ -117,8 +117,8 @@ run args = case getOpt RequireOrder cmdLineOpts args of
   (_, _, errors)     -> invalidUsageError errors
 
 runStackCollapse :: FilePath -> StackCollapseConfig -> IO ()
-runStackCollapse inpath config = handle errorCall
-  $ stackCollapseFromPath config inpath <&> collapseStack
+runStackCollapse inpath config = stackCollapseFromPath config inpath
+  <&> collapseStack
   >>= either (runtimeError . userError) Lazy.putStrLn
 
 printUsage :: Handle -> IO ()
@@ -145,13 +145,6 @@ runtimeError :: IOError -> IO a
 runtimeError ioerror = do
   putErrLn $ displayException ioerror
   exitWith $ ExitFailure 2
-
-errorCall :: ErrorCall -> IO a
-errorCall ex = do
-  putErrLn $ displayException ex ++ " (thrown during parsing the file)"
-  putErrLn
-    "This usually means that the file is not in the correct format. In other case - this might be a bug"
-  exitWith $ ExitFailure 3
 
 putErrLn :: String -> IO ()
 putErrLn = hPutStrLn stderr

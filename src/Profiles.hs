@@ -25,24 +25,30 @@ import           Trace
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString.Char8 as Char8
 import           Data.Char (isSpace)
+import           Data.List.NonEmpty (NonEmpty(..), nonEmpty)
+import qualified Data.List.NonEmpty as NEL
+import           Data.Either.Extra (maybeToEither)
 import           Control.Applicative (liftA2)
 import           Control.Arrow (left)
+import           Control.Monad
+import           Safe (tailMay)
 
 newtype Detailed = ProfileDetailed ByteString
 
-detailedProfStart :: Detailed -> [NumberedLine]
+detailedProfStart :: Detailed -> MayFail [NumberedLine]
 detailedProfStart (ProfileDetailed bs) = skipToMain $ numberedLines bs
 
 newtype Standard = ProfileStandard ByteString
 
-totalsStart :: Standard -> [NumberedLine]
+totalsStart :: Standard -> MayFail (NonEmpty NumberedLine)
 totalsStart (ProfileStandard bs) = skipToTotalTime $ numberedLines bs
 
 class Profile p where
   buildCallForest :: OperationMode -> p -> MayFail CallForest
 
 instance Profile Detailed where
-  buildCallForest opMode = tryBuildCallForest format opMode . detailedProfStart
+  buildCallForest
+    opMode = detailedProfStart >=> tryBuildCallForest format opMode
     where
       format
         [_cc, _module, _src, _, _, _, _, _inhTime, _inhAlloc, _ticks, _bytes] =
@@ -59,20 +65,19 @@ instance Profile Detailed where
 
 instance Profile Standard where
   buildCallForest opMode p = do
+    start <- totalsStart p
+    let (totalTimeLine, afterTotalTime) = NEL.uncons start
     totalTicks <- left ((printError "total ticks" $ fst totalTimeLine) ++)
       $ readTotalTicks
       $ snd totalTimeLine
+    (totalAllocLine :| afterTotals)
+      <- maybeToEither (eofError "after the total ticks line") afterTotalTime
     totalBytes <- left ((printError "total bytes" $ fst totalAllocLine) ++)
       $ readTotalBytes
       $ snd totalAllocLine
-    tryBuildCallForest (format totalTicks totalBytes) opMode $ skipToMain start
+    input <- skipToMain afterTotals
+    tryBuildCallForest (format totalTicks totalBytes) opMode input
     where
-      start = totalsStart p
-
-      totalTimeLine = head start
-
-      totalAllocLine = head $ tail start
-
       format
         totalTicks
         totalBytes
@@ -91,17 +96,18 @@ instance Profile Standard where
               Inherited <$> readDouble _inhTime <*> readDouble _inhAlloc
         in liftA2 (,) readTrace readInherited
       format _ _ _ = Left
-        "unexpected number of columns. Is the input file in the correct format (-p)?"
+        "unexpected number of columns. Is the input file in the correct format (-p)? Did you use the '-p' option?"
 
       printError what line = "confused at line "
         ++ show line
-        ++ " when trying to parse "
+        ++ " when trying to parse '"
         ++ what
-        ++ ": "
+        ++ "': "
 
-skipToMain :: [NumberedLine] -> [NumberedLine]
-skipToMain =
-  skipEmpty . tail . skipToCostCentreHeader . tail . skipToCostCentreHeader
+skipToMain :: [NumberedLine] -> MayFail [NumberedLine]
+skipToMain = fmap skipEmpty
+  . maybeToEither (eofError "can't find the header")
+  . (tailMay . skipToCostCentreHeader >=> tailMay . skipToCostCentreHeader)
   where
     startsWithCostCentre = ("COST CENTRE" `Char8.isPrefixOf`) . snd
 
@@ -109,13 +115,20 @@ skipToMain =
 
     skipEmpty = dropWhile (Char8.null . snd)
 
-skipToTotalTime :: [NumberedLine] -> [NumberedLine]
-skipToTotalTime = dropWhile (not . startsWithTotalTime)
+skipToTotalTime :: [NumberedLine] -> MayFail (NonEmpty NumberedLine)
+skipToTotalTime = maybeToEither (eofError "can't find the total time line")
+  . nonEmpty
+  . dropWhile (not . startsWithTotalTime)
   where
     startsWithTotalTime = ("total time" `Char8.isPrefixOf`) . trimLeft . snd
 
+eofError :: String -> String
+eofError why = "unexpected end of file: "
+  ++ why
+  ++ " \n(This usually means that the file is malformed. If you're sure that the file is correct then you found a bug)"
+
 readTotalTicks :: ByteString -> MayFail Integer
-readTotalTicks = readInteger . Char8.tail . trim . atOpeningParen
+readTotalTicks = readInteger . Char8.drop 1 . trim . atOpeningParen
   where
     atOpeningParen = Char8.dropWhile (/= '(')
 
