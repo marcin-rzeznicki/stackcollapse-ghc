@@ -1,0 +1,15 @@
+	Mon May 18 18:00 2020 Time and Allocation Profiling Report  (Final)
+
+	   codility-profiler +RTS -P -i0.001 -hy -ki64k -pocountSemiprimes -s -A12m -H1g -RTS run countSemiprimes /tmp/countSemiprimes-args.proftnsjB4
+
+	total time  =        0.62 secs   (623 ticks @ 1000 us, 1 processor)
+	total alloc = 538,603,824 bytes  (excludes profiling overheads)
+
+COST CENTRE                     MODULE                  SRC                                      %time %alloc  ticks     bytes
+
+unionBy.loop                    Data.List.Ordered       Data/List/Ordered.hs:(237,6)-(243,34)     69.5   86.1    433 463788944
+union                           Data.List.Ordered       Data/List/Ordered.hs:231:1-23             19.6    0.0    122         0
+countSemiprimes'.noOfSemiprimes Lesson11                src/Lesson11.hs:(54,3)-(56,22)             1.3    1.2      8   6400480
+>>=                             Data.Vector.Fusion.Util Data/Vector/Fusion/Util.hs:36:3-18         1.0    1.6      6   8800336
+go_fast                         Codec.CBOR.Read         src/Codec/CBOR/Read.hs:(264,1)-(707,43)    0.8    1.3      5   7197720
+>>=.\.\                         Codec.CBOR.Decoding     src/Codec/CBOR/Decoding.hs:287:38-77       0.3    1.6      2   8640304

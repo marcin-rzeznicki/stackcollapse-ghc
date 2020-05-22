@@ -41,13 +41,29 @@ main = hspec
         "test2"
         [ defaultConfig { inputType = Standard }
             `prependUserModule` userModuleFromString "Lesson11"
-        , defaultConfig { inputType = Standard } { operationMode = Alloc }
+        , defaultConfig { inputType = Standard, operationMode = Alloc }
             `prependUserModule` userModuleFromString "Lesson11"]
     context "unicode chars"
-      $ stackCollapseTest "test3"
-      $ defaultConfig { inputType = Standard
-                      , functionNameMode = QualifiedNever
-                      }
+      $ withConfigs
+        "unicode"
+        [ defaultConfig { inputType = Standard
+                        , functionNameMode = QualifiedNever
+                        }
+        , defaultConfig { inputType = Standard, sourceMode = SourceAlways }]
+    context "no header" $ stackCollapseTest "no-header" defaultConfig
+    context "no totals"
+      $ stackCollapseTest "no-totals"
+      $ defaultConfig { inputType = Standard }
+    context "malformed total bytes"
+      $ stackCollapseTest "malformed-bytes"
+      $ defaultConfig { inputType = Standard }
+    context "malformed ticks"
+      $ stackCollapseTest "no-ticks"
+      $ defaultConfig { inputType = Standard }
+    context "data errors"
+      $ withConfigs
+        "errors"
+        [defaultConfig, defaultConfig { operationMode = Alloc }]
 
 withConfigs :: String -> [StackCollapseConfig] -> Spec
 withConfigs fileStem = mapM_ (stackCollapseTest fileStem)
