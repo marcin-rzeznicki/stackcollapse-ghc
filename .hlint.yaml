@@ -1,0 +1,7 @@
+# HLint configuration file
+# https://github.com/ndmitchell/hlint
+##########################
+
+# Warnings currently triggered by your code
+- ignore: {name: "Use camelCase"}
+

@@ -118,8 +118,7 @@ run args = case getOpt RequireOrder cmdLineOpts args of
 
 runStackCollapse :: FilePath -> StackCollapseConfig -> IO ()
 runStackCollapse inpath config = stackCollapseFromPath config inpath
-  <&> collapseStack
-  >>= either (runtimeError . userError) Lazy.putStrLn
+  >>= either (runtimeError . userError) Lazy.putStrLn . collapseStack
 
 printUsage :: Handle -> IO ()
 printUsage h = do
