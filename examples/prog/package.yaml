@@ -1,0 +1,42 @@
+name:                prog
+version:             0.1.0.0
+github:              "marcin-rzeznicki/stackcollapse-ghc/examples"
+license:             WTFPL
+author:              "Marcin Rzeźnicki"
+maintainer:          "marcin.rzeznicki@gmail.com"
+copyright:           "2020 Marcin Rzeźnicki"
+
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         This is just an example program for stackcollapse-ghc. It computes n first semiprime numbers
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+  dependencies:
+  - vector
+  - pqueue
+  - data-ordlist
+
+executables:
+  prog-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -O1
+    - -threaded
+    - -rtsopts
+    - -fprof-auto
+    - -fprof-cafs
+    dependencies:
+    - prog
+    - deepseq
+

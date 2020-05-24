@@ -27,30 +27,34 @@ main = hspec
   $ do
     context "detailed prof"
       $ withConfigs
-        "test1"
+        "semiprimes"
         [ defaultConfig
-        , defaultConfig `prependUserModule` userModuleFromString "Lesson11"
+        , defaultConfig `prependUserModule` userModuleFromString "Example"
         , defaultConfig { sourceMode = SourceUser }
-            `prependUserModule` userModuleFromString "Lesson11"
+            `prependUserModule` userModuleFromString "Example"
         , defaultConfig { functionNameMode = QualifiedNever }
-            `prependUserModule` userModuleFromString "Lesson11"
+            `prependUserModule` userModuleFromString "Example"
         , defaultConfig { operationMode = Alloc }
-            `prependUserModule` userModuleFromString "Lesson11"]
+            `prependUserModule` userModuleFromString "Example"]
     context "standard prof"
       $ withConfigs
-        "test2"
+        "countSemiprimes"
         [ defaultConfig { inputType = Standard }
-            `prependUserModule` userModuleFromString "Lesson11"
+            `prependUserModule` userModuleFromString "Example"
         , defaultConfig { inputType = Standard, operationMode = Alloc }
-            `prependUserModule` userModuleFromString "Lesson11"]
+            `prependUserModule` userModuleFromString "Example"]
     context "unicode chars"
       $ withConfigs
         "unicode"
         [ defaultConfig { inputType = Standard
                         , functionNameMode = QualifiedNever
                         }
-        , defaultConfig { inputType = Standard, sourceMode = SourceAlways }]
+        , defaultConfig { inputType = Standard
+                        , operationMode = Alloc
+                        , sourceMode = SourceAlways
+                        }]
     context "no header" $ stackCollapseTest "no-header" defaultConfig
+    context "just totals" $ stackCollapseTest "no-data" defaultConfig
     context "no totals"
       $ stackCollapseTest "no-totals"
       $ defaultConfig { inputType = Standard }

@@ -9,7 +9,7 @@ COST CENTRE                    MODULE                        SRC                
 
 unionBy.loop                   Data.List.Ordered             Data/List/Ordered.hs:(237,6)-(243,34)       71.4   91.9
 union                          Data.List.Ordered             Data/List/Ordered.hs:231:1-23               22.3    0.0
-countSemiprimes.noOfSemiprimes Example                       источники/Example.hs:(15,5)-(17,22)                1.7    1.3
+countSemiprimes.noOfSemiprimes Example                       src/Example.hs:(15,5)-(17,22)                1.7    1.3
 basicUnsafeWrite               Data.Vector.Primitive.Mutable Data/Vector/Primitive/Mutable.hs:124:3-69    1.3    0.5
 >>=                            Data.Vector.Fusion.Util       Data/Vector/Fusion/Util.hs:36:3-18           0.3    1.7
 
@@ -45,30 +45,30 @@ MAIN                                   MAIN                              <built-
  CAF:findMin                           Data.PQueue.Prio.Min              Data/PQueue/Prio/Min.hs:189:1-7                       1628          0    0.0    0.0     0.0    0.0
   findMin                              Data.PQueue.Prio.Min              Data/PQueue/Prio/Min.hs:189:1-78                      2955          1    0.0    0.0     0.0    0.0
  CAF:lvl60_rful                        Example                           <no location info>                                    2820          0    0.0    0.0     0.0    0.0
-  countSemiprimes                      Example                           источники/Example.hs:(12,1)-(17,22)                   2891          0    0.0    0.0     0.0    0.0
-   countSemiprimes.noOfSemiprimes      Example                           источники/Example.hs:(15,5)-(17,22)                   2892          0    0.0    0.0     0.0    0.0
-    isNSemiprime                       Example                           источники/Example.hs:(20,1)-(25,25)                   2893          0    0.0    0.0     0.0    0.0
+  countSemiprimes                      Example                           src/Example.hs:(12,1)-(17,22)                         2891          0    0.0    0.0     0.0    0.0
+   countSemiprimes.noOfSemiprimes      Example                           src/Example.hs:(15,5)-(17,22)                         2892          0    0.0    0.0     0.0    0.0
+    isNSemiprime                       Example                           src/Example.hs:(20,1)-(25,25)                         2893          0    0.0    0.0     0.0    0.0
      basicUnsafeNew                    Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:354:3-55                  2894          0    0.0    0.0     0.0    0.0
       basicUnsafeNew                   Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:(105,3)-(111,37)     2895          0    0.0    0.0     0.0    0.0
        basicUnsafeNew.mx               Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:111:7-37             2896          0    0.0    0.0     0.0    0.0
  CAF:main1                             Main                              <no location info>                                    2864          0    0.0    0.0     0.0    0.0
   main                                 Main                              app/Main.hs:10:1-22                                   2866          1    0.0    0.0     0.0    0.0
- CAF:nextComposite_rfu0                Example                           источники/Example.hs:45:5-17                          2811          0    0.0    0.0     0.0    0.0
-  primes                               Example                           источники/Example.hs:(61,1)-(117,55)                  2950          0    0.0    0.0     0.0    0.0
-   primes.large                        Example                           источники/Example.hs:65:5-37                          2951          0    0.0    0.0     0.0    0.0
-    sieve                              Example                           источники/Example.hs:(40,1)-(58,53)                   2952          0    0.0    0.0     0.0    0.0
-     sieve.nextComposite               Example                           источники/Example.hs:45:5-36                          2953          1    0.0    0.0     0.0    0.0
+ CAF:nextComposite_rfu0                Example                           src/Example.hs:45:5-17                                2811          0    0.0    0.0     0.0    0.0
+  primes                               Example                           src/Example.hs:(61,1)-(117,55)                        2950          0    0.0    0.0     0.0    0.0
+   primes.large                        Example                           src/Example.hs:65:5-37                                2951          0    0.0    0.0     0.0    0.0
+    sieve                              Example                           src/Example.hs:(40,1)-(58,53)                         2952          0    0.0    0.0     0.0    0.0
+     sieve.nextComposite               Example                           src/Example.hs:45:5-36                                2953          1    0.0    0.0     0.0    0.0
  CAF:primesTo10                        Example                           <no location info>                                    2810          0    0.0    0.0     0.0    0.1
-  primes                               Example                           источники/Example.hs:(61,1)-(117,55)                  2942          0    0.0    0.0     0.0    0.1
-   primes.large                        Example                           источники/Example.hs:65:5-37                          2943          0    0.0    0.0     0.0    0.1
-    primes.spin                        Example                           источники/Example.hs:117:5-55                         2944       5717    0.0    0.1     0.0    0.1
+  primes                               Example                           src/Example.hs:(61,1)-(117,55)                        2942          0    0.0    0.0     0.0    0.1
+   primes.large                        Example                           src/Example.hs:65:5-37                                2943          0    0.0    0.0     0.0    0.1
+    primes.spin                        Example                           src/Example.hs:117:5-55                               2944       5717    0.0    0.1     0.0    0.1
  CAF:primesTo8                         Example                           <no location info>                                    2814          0    0.0    0.0     1.0    1.9
-  primes                               Example                           источники/Example.hs:(61,1)-(117,55)                  2939          0    0.0    0.0     1.0    1.9
-   primes.large                        Example                           источники/Example.hs:65:5-37                          2940          0    0.0    0.0     1.0    1.9
-    sieve                              Example                           источники/Example.hs:(40,1)-(58,53)                   2941          1    0.0    0.0     1.0    1.9
-     sieve.sieve'                      Example                           источники/Example.hs:(49,5)-(52,46)                   2945       5716    0.0    0.1     1.0    1.9
-      sieve.adjust                     Example                           источники/Example.hs:(54,5)-(58,53)                   2966       6524    0.3    0.0     0.7    1.5
-       sieve.adjust.(...)              Example                           источники/Example.hs:58:9-53                          2968       6524    0.0    0.0     0.3    1.3
+  primes                               Example                           src/Example.hs:(61,1)-(117,55)                        2939          0    0.0    0.0     1.0    1.9
+   primes.large                        Example                           src/Example.hs:65:5-37                                2940          0    0.0    0.0     1.0    1.9
+    sieve                              Example                           src/Example.hs:(40,1)-(58,53)                         2941          1    0.0    0.0     1.0    1.9
+     sieve.sieve'                      Example                           src/Example.hs:(49,5)-(52,46)                         2945       5716    0.0    0.1     1.0    1.9
+      sieve.adjust                     Example                           src/Example.hs:(54,5)-(58,53)                         2966       6524    0.3    0.0     0.7    1.5
+       sieve.adjust.(...)              Example                           src/Example.hs:58:9-53                                2968       6524    0.0    0.0     0.3    1.3
         deleteFindMin                  Data.PQueue.Prio.Min              Data/PQueue/Prio/Min.hs:198:1-98                      2969       6524    0.0    0.0     0.3    1.3
          minViewWithKey                Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(209,1)-(210,70)        2970       6524    0.0    0.0     0.3    1.3
           extractHeap                  Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(312,1)-(314,48)        2975       3566    0.0    0.0     0.3    1.3
@@ -78,38 +78,38 @@ MAIN                                   MAIN                              <built-
               meld                     Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(269,1)-(271,46)        2992      11640    0.0    0.0     0.0    0.0
              meld                      Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(269,1)-(271,46)        2990      11934    0.0    0.0     0.0    0.0
             extractForest.<?           Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:363:5-27                2985      16714    0.0    0.0     0.0    0.0
-       sieve.adjust.n                  Example                           источники/Example.hs:58:9-53                          2967       6524    0.0    0.0     0.0    0.0
-       sieve.adjust.facts              Example                           источники/Example.hs:58:9-53                          2987       3566    0.0    0.0     0.0    0.0
-       sieve.adjust.table'             Example                           источники/Example.hs:58:9-53                          2974       3566    0.0    0.0     0.0    0.0
-       sieve.reinsert                  Example                           источники/Example.hs:47:5-56                          2971       3566    0.0    0.0     0.0    0.2
+       sieve.adjust.n                  Example                           src/Example.hs:58:9-53                                2967       6524    0.0    0.0     0.0    0.0
+       sieve.adjust.facts              Example                           src/Example.hs:58:9-53                                2987       3566    0.0    0.0     0.0    0.0
+       sieve.adjust.table'             Example                           src/Example.hs:58:9-53                                2974       3566    0.0    0.0     0.0    0.0
+       sieve.reinsert                  Example                           src/Example.hs:47:5-56                                2971       3566    0.0    0.0     0.0    0.2
         insert                         Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:150:1-21                2972       3566    0.0    0.1     0.0    0.2
          insert'                       Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(169,1)-(172,59)        2973       3566    0.0    0.0     0.0    0.1
           incr                         Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(297,1)-(300,50)        2989       7104    0.0    0.1     0.0    0.1
            meld                        Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(269,1)-(271,46)        2993       3539    0.0    0.0     0.0    0.0
           tip                          Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:265:1-28                2988       3565    0.0    0.0     0.0    0.0
-      sieve.crossoff                   Example                           источники/Example.hs:43:5-68                          2963       2757    0.0    0.1     0.3    0.3
+      sieve.crossoff                   Example                           src/Example.hs:43:5-68                                2963       2757    0.0    0.1     0.3    0.3
        insert                          Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:150:1-21                2964       2757    0.3    0.0     0.3    0.1
         insert'                        Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(169,1)-(172,59)        2965       2757    0.0    0.0     0.0    0.1
          incr                          Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(297,1)-(300,50)        2978       5508    0.0    0.1     0.0    0.1
           meld                         Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(269,1)-(271,46)        2979       2751    0.0    0.0     0.0    0.0
          tip                           Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:265:1-28                2977       2757    0.0    0.0     0.0    0.0
-     sieve.crossoff                    Example                           источники/Example.hs:43:5-68                          2958          1    0.0    0.0     0.0    0.0
+     sieve.crossoff                    Example                           src/Example.hs:43:5-68                                2958          1    0.0    0.0     0.0    0.0
       insert                           Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:150:1-21                2959          1    0.0    0.0     0.0    0.0
        insert'                         Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(169,1)-(172,59)        2960          1    0.0    0.0     0.0    0.0
         singleton                      Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:145:1-31                2962          1    0.0    0.0     0.0    0.0
-     sieve.nextComposite               Example                           источники/Example.hs:45:5-36                          2954          0    0.0    0.0     0.0    0.0
+     sieve.nextComposite               Example                           src/Example.hs:45:5-36                                2954          0    0.0    0.0     0.0    0.0
       findMin                          Data.PQueue.Prio.Min              Data/PQueue/Prio/Min.hs:189:1-78                      2956          0    0.0    0.0     0.0    0.0
        getMin                          Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(190,1)-(191,32)        2957       5716    0.0    0.0     0.0    0.0
- CAF:primesTo_$sprimes                 Example                           источники/Example.hs:61:1-6                           2815          0    0.0    0.0     0.0    0.0
-  primes                               Example                           источники/Example.hs:(61,1)-(117,55)                  2922          1    0.0    0.0     0.0    0.0
-   primes.large                        Example                           источники/Example.hs:65:5-37                          2938          1    0.0    0.0     0.0    0.0
-   primes.small                        Example                           источники/Example.hs:63:5-24                          2923          1    0.0    0.0     0.0    0.0
- CAF:primesTo_wheel2357                Example                           источники/Example.hs:67:5-13                          2809          0    0.0    0.0     0.0    0.0
-  primes                               Example                           источники/Example.hs:(61,1)-(117,55)                  2946          0    0.0    0.0     0.0    0.0
-   primes.wheel2357                    Example                           источники/Example.hs:(67,5)-(115,11)                  2947          1    0.0    0.0     0.0    0.0
+ CAF:primesTo_$sprimes                 Example                           src/Example.hs:61:1-6                                 2815          0    0.0    0.0     0.0    0.0
+  primes                               Example                           src/Example.hs:(61,1)-(117,55)                        2922          1    0.0    0.0     0.0    0.0
+   primes.large                        Example                           src/Example.hs:65:5-37                                2938          1    0.0    0.0     0.0    0.0
+   primes.small                        Example                           src/Example.hs:63:5-24                                2923          1    0.0    0.0     0.0    0.0
+ CAF:primesTo_wheel2357                Example                           src/Example.hs:67:5-13                                2809          0    0.0    0.0     0.0    0.0
+  primes                               Example                           src/Example.hs:(61,1)-(117,55)                        2946          0    0.0    0.0     0.0    0.0
+   primes.wheel2357                    Example                           src/Example.hs:(67,5)-(115,11)                        2947          1    0.0    0.0     0.0    0.0
  CAF:primesTo_xs'                      Example                           <no location info>                                    2808          0    0.0    0.0     0.0    0.0
-  primes                               Example                           источники/Example.hs:(61,1)-(117,55)                  2948          0    0.0    0.0     0.0    0.0
-   primes.wheel2357                    Example                           источники/Example.hs:(67,5)-(115,11)                  2949          0    0.0    0.0     0.0    0.0
+  primes                               Example                           src/Example.hs:(61,1)-(117,55)                        2948          0    0.0    0.0     0.0    0.0
+   primes.wheel2357                    Example                           src/Example.hs:(67,5)-(115,11)                        2949          0    0.0    0.0     0.0    0.0
  CAF:run1                              Main                              <no location info>                                    2861          0    0.0    0.0     0.0    0.0
   run                                  Main                              app/Main.hs:(13,1)-(24,17)                            2869          0    0.0    0.0     0.0    0.0
    profile                             Main                              app/Main.hs:27:1-65                                   2870          1    0.0    0.0     0.0    0.0
@@ -118,15 +118,15 @@ MAIN                                   MAIN                              <built-
    profile                             Main                              app/Main.hs:27:1-65                                   2873          0    0.0    0.0     0.0    0.0
  CAF:run32                             Main                              <no location info>                                    2858          0    0.0    0.0     5.3    5.4
   run                                  Main                              app/Main.hs:(13,1)-(24,17)                            2877          0    0.0    0.0     5.3    5.4
-   countSemiprimes                     Example                           источники/Example.hs:(12,1)-(17,22)                   2880          1    0.0    0.0     5.3    5.4
-    countSemiprimes.noOfSemiprimes     Example                           источники/Example.hs:(15,5)-(17,22)                   2885          1    1.7    1.3     5.3    5.4
+   countSemiprimes                     Example                           src/Example.hs:(12,1)-(17,22)                         2880          1    0.0    0.0     5.3    5.4
+    countSemiprimes.noOfSemiprimes     Example                           src/Example.hs:(15,5)-(17,22)                         2885          1    1.7    1.3     5.3    5.4
      >>=                               Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:36:3-18                    3021     200011    0.3    1.7     2.7    2.8
       fmap                             Data.Vector.Fusion.Stream.Monadic Data/Vector/Fusion/Stream/Monadic.hs:(133,3)-(135,20) 3024      50004    0.7    0.6     2.3    1.0
        basicUnsafeWrite                Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:241:1480-1538             3025      50002    0.0    0.0     1.7    0.4
         basicUnsafeWrite               Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:124:3-69             3026      50002    1.3    0.4     1.7    0.4
          primitive                     Control.Monad.Primitive           Control/Monad/Primitive.hs:205:3-16                   3030          0    0.3    0.0     0.3    0.0
           writeByteArray#              Data.Primitive.Types              Data/Primitive/Types.hs:263:433-499                   3031      50002    0.0    0.0     0.0    0.0
-      countSemiprimes.noOfSemiprimes.λ Example                           источники/Example.hs:16:40-64                         3041      50001    0.0    0.0     0.0    0.0
+      countSemiprimes.noOfSemiprimes.\ Example                           src/Example.hs:16:40-64                               3041      50001    0.0    0.0     0.0    0.0
      unId                              Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                   3020      50004    0.0    0.0     0.0    0.0
      basicUnsafeSlice                  Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:241:1016-1084             3027      50003    0.0    0.0     0.0    0.3
       basicUnsafeSlice                 Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:(94,3)-(95,25)       3028      50003    0.0    0.3     0.0    0.3
@@ -148,8 +148,8 @@ MAIN                                   MAIN                              <built-
          sizeOf#                       Data.Primitive.Types              Data/Primitive/Types.hs:263:68-95                     3015          1    0.0    0.0     0.0    0.0
           unI#                         Data.Primitive.Types              Data/Primitive/Types.hs:246:1-17                      3016          1    0.0    0.0     0.0    0.0
        primitive                       Control.Monad.Primitive           Control/Monad/Primitive.hs:205:3-16                   3018          1    0.0    0.1     0.0    0.1
-     isNSemiprime                      Example                           источники/Example.hs:(20,1)-(25,25)                   2886          1    0.0    0.0     0.0    0.2
-      isNSemiprime.λ                   Example                           источники/Example.hs:24:30-57                         2925      12110    0.0    0.0     0.0    0.1
+     isNSemiprime                      Example                           src/Example.hs:(20,1)-(25,25)                         2886          1    0.0    0.0     0.0    0.2
+      isNSemiprime.\                   Example                           src/Example.hs:24:30-57                               2925      12110    0.0    0.0     0.0    0.1
        basicUnsafeWrite                Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:358:3-72                  2926      12110    0.0    0.0     0.0    0.1
         basicUnsafeWrite               Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:124:3-69             2927      12110    0.0    0.1     0.0    0.1
          primitive                     Control.Monad.Primitive           Control/Monad/Primitive.hs:205:3-16                   2928      12110    0.0    0.0     0.0    0.0
@@ -172,8 +172,8 @@ MAIN                                   MAIN                              <built-
        basicUnsafeNew                  Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:(105,3)-(111,37)     2889          1    0.0    0.0     0.0    0.0
         basicUnsafeNew.mx              Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:111:7-37             2890          1    0.0    0.0     0.0    0.0
         primitive                      Control.Monad.Primitive           Control/Monad/Primitive.hs:205:3-16                   2907          1    0.0    0.0     0.0    0.0
-      isNSemiprime.nSemiprimes         Example                           источники/Example.hs:23:9-40                          2919          1    0.0    0.0     0.0    0.1
-       semiprimesTo                    Example                           источники/Example.hs:28:1-52                          2920          1    0.0    0.1     0.0    0.1
+      isNSemiprime.nSemiprimes         Example                           src/Example.hs:23:9-40                                2919          1    0.0    0.0     0.0    0.1
+       semiprimesTo                    Example                           src/Example.hs:28:1-52                                2920          1    0.0    0.1     0.0    0.1
      sChunks                           Data.Vector.Fusion.Bundle.Monadic Data/Vector/Fusion/Bundle/Monadic.hs:122:30-36        3019          1    0.0    0.0     0.0    0.0
      sSize                             Data.Vector.Fusion.Bundle.Monadic Data/Vector/Fusion/Bundle/Monadic.hs:124:30-34        3007          1    0.0    0.0     0.0    0.0
      upperBound                        Data.Vector.Fusion.Bundle.Size    Data/Vector/Fusion/Bundle/Size.hs:(126,1)-(128,30)    3006          1    0.0    0.0     0.0    0.0
@@ -182,8 +182,8 @@ MAIN                                   MAIN                              <built-
  CAF:run37                             Main                              <no location info>                                    2862          0    0.0    0.0     0.0    0.0
  CAF:run_x                             Main                              <no location info>                                    2859          0    0.0    0.0     0.0    0.0
   run                                  Main                              app/Main.hs:(13,1)-(24,17)                            2874          0    0.0    0.0     0.0    0.0
-   countSemiprimes                     Example                           источники/Example.hs:(12,1)-(17,22)                   2881          0    0.0    0.0     0.0    0.0
-    countSemiprimes.λ                  Example                           источники/Example.hs:13:23-67                         2882          9    0.0    0.0     0.0    0.0
+   countSemiprimes                     Example                           src/Example.hs:(12,1)-(17,22)                         2881          0    0.0    0.0     0.0    0.0
+    countSemiprimes.\                  Example                           src/Example.hs:13:23-67                               2882          9    0.0    0.0     0.0    0.0
      unId                              Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                   2884         36    0.0    0.0     0.0    0.0
      basicLength                       Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:242:664-703               3053         18    0.0    0.0     0.0    0.0
       basicLength                      Data.Vector.Primitive             Data/Vector/Primitive.hs:228:3-32                     3054         18    0.0    0.0     0.0    0.0
@@ -196,18 +196,18 @@ MAIN                                   MAIN                              <built-
   sIZEOF_INT                           Data.Primitive.MachDeps           Data/Primitive/MachDeps.hs:71:1-14                    3017          1    0.0    0.0     0.0    0.0
  CAF:sIZEOF_WORD8                      Data.Primitive.MachDeps           Data/Primitive/MachDeps.hs:95:1-12                    2194          0    0.0    0.0     0.0    0.0
   sIZEOF_WORD8                         Data.Primitive.MachDeps           Data/Primitive/MachDeps.hs:95:1-16                    2906          1    0.0    0.0     0.0    0.0
- CAF:semiprimes_$ssemiprimes           Example                           источники/Example.hs:31:1-10                          2817          0    0.0    0.0    93.7   92.5
-  semiprimes                           Example                           источники/Example.hs:(31,1)-(33,51)                   2921          1    0.0    0.1    93.7   92.5
-   semiprimes.λ                        Example                           источники/Example.hs:31:29-58                         2924       2763    0.0    0.0    93.7   92.4
-    semiprimes.facts                   Example                           источники/Example.hs:33:5-51                          2933       2762    0.0    0.3     0.0    0.5
-     primesTo                          Example                           источники/Example.hs:36:1-44                          2934       2762    0.0    0.2     0.0    0.2
+ CAF:semiprimes_$ssemiprimes           Example                           src/Example.hs:31:1-10                                2817          0    0.0    0.0    93.7   92.5
+  semiprimes                           Example                           src/Example.hs:(31,1)-(33,51)                         2921          1    0.0    0.1    93.7   92.5
+   semiprimes.\                        Example                           src/Example.hs:31:29-58                               2924       2763    0.0    0.0    93.7   92.4
+    semiprimes.facts                   Example                           src/Example.hs:33:5-51                                2933       2762    0.0    0.3     0.0    0.5
+     primesTo                          Example                           src/Example.hs:36:1-44                                2934       2762    0.0    0.2     0.0    0.2
     union                              Data.List.Ordered                 Data/List/Ordered.hs:231:1-23                         2930       2762   22.3    0.0    93.7   91.9
      unionBy                           Data.List.Ordered                 Data/List/Ordered.hs:(235,1)-(243,34)                 2931       2762    0.0    0.0    71.4   91.9
       unionBy.loop                     Data.List.Ordered                 Data/List/Ordered.hs:(237,6)-(243,34)                 2932    7246750   71.4   91.9    71.4   91.9
  CAF:size48_rfui                       Example                           <no location info>                                    2819          0    0.0    0.0     0.0    0.0
-  countSemiprimes                      Example                           источники/Example.hs:(12,1)-(17,22)                   2897          0    0.0    0.0     0.0    0.0
-   countSemiprimes.noOfSemiprimes      Example                           источники/Example.hs:(15,5)-(17,22)                   2898          0    0.0    0.0     0.0    0.0
-    isNSemiprime                       Example                           источники/Example.hs:(20,1)-(25,25)                   2899          0    0.0    0.0     0.0    0.0
+  countSemiprimes                      Example                           src/Example.hs:(12,1)-(17,22)                         2897          0    0.0    0.0     0.0    0.0
+   countSemiprimes.noOfSemiprimes      Example                           src/Example.hs:(15,5)-(17,22)                         2898          0    0.0    0.0     0.0    0.0
+    isNSemiprime                       Example                           src/Example.hs:(20,1)-(25,25)                         2899          0    0.0    0.0     0.0    0.0
      basicUnsafeNew                    Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:354:3-55                  2900          0    0.0    0.0     0.0    0.0
       basicUnsafeNew                   Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:(105,3)-(111,37)     2901          0    0.0    0.0     0.0    0.0
        basicUnsafeNew.size             Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:110:7-36             2902          1    0.0    0.0     0.0    0.0

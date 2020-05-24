@@ -1,0 +1,14 @@
+MAIN;CAF_[i] 1
+MAIN;CAF:run_x1_[i];run_[j];profile_[j];program_[j];semiprimesTo_[j] 1
+MAIN;CAF:run_x1_[i];run_[j];profile_[j];program_[j];semiprimesTo_[j];semiprimes_[j];semiprimes.\_[j];semiprimes.facts_[j] 4
+MAIN;CAF:run_x1_[i];run_[j];profile_[j];program_[j];semiprimesTo_[j];semiprimes_[j];semiprimes.\_[j];semiprimes.facts_[j];primesTo_[j] 1
+MAIN;CAF:run_x1_[i];run_[j];profile_[j];program_[j];semiprimesTo_[j];semiprimes_[j];semiprimes.\_[j];semiprimes.facts_[j];primesTo_[j];primes_[j];primes.large_[j];sieve_[j];sieve.sieve'_[j];sieve.crossoff_[j] 1
+MAIN;CAF:run_x1_[i];run_[j];profile_[j];program_[j];semiprimesTo_[j];semiprimes_[j];semiprimes.\_[j];semiprimes.facts_[j];primesTo_[j];primes_[j];primes.large_[j];sieve_[j];sieve.crossoff_[j] 1
+MAIN;CAF:run_x1_[i];run_[j];profile_[j];program_[j];semiprimesTo_[j];semiprimes_[j];semiprimes.\_[j];semiprimes.facts_[j];primesTo_[j];primes_[j];primes.wheel2357_[j] 1
+MAIN;CAF:run_x1_[i];run_[j];profile_[j];program_[j];semiprimesTo_[j];semiprimes_[j];semiprimes.\_[j];union;unionBy;unionBy.loop 260
+MAIN;CAF:run_x1_[i];run_[j];profile_[j];program_[j];semiprimesTo_[j];semiprimes_[j];primes_[j];primes.large_[j];sieve_[j];sieve.sieve'_[j] 1
+MAIN;CAF:run_x1_[i];run_[j];profile_[j];program_[j];semiprimesTo_[j];semiprimes_[j];primes_[j];primes.large_[j];sieve_[j];sieve.sieve'_[j];sieve.adjust_[j] 1
+MAIN;CAF:run_x1_[i];run_[j];profile_[j];program_[j];semiprimesTo_[j];semiprimes_[j];primes_[j];primes.large_[j];sieve_[j];sieve.sieve'_[j];sieve.adjust_[j];sieve.adjust.(...)_[j];deleteFindMin;minViewWithKey;extractHeap;extractForest 1
+MAIN;CAF:run_x1_[i];run_[j];profile_[j];program_[j];semiprimesTo_[j];semiprimes_[j];primes_[j];primes.large_[j];sieve_[j];sieve.sieve'_[j];sieve.adjust_[j];sieve.reinsert_[j];insert 1
+MAIN;CAF:run_x1_[i];run_[j];profile_[j];program_[j];semiprimesTo_[j];semiprimes_[j];primes_[j];primes.large_[j];sieve_[j];sieve.sieve'_[j];sieve.crossoff_[j];insert;insert';incr 1
+MAIN;CAF:run_x1_[i];run_[j];profile_[j];program_[j];semiprimesTo_[j];semiprimes_[j];primes_[j];primes.large_[j];sieve_[j];sieve.nextComposite_[j] 1

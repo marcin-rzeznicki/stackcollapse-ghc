@@ -1,7 +1,6 @@
-	Thu May 21 02:27 2020 Time and Allocation Profiling Report  (Final)
+	Sun May 24 19:22 2020 Time and Allocation Profiling Report  (Final)
 
-	   codility-profiler +RTS -p -i0.001 -hy -ki64k -pocountSemiprimes -s -A12m -H1g -RTS run countSemiprimes /tmp/countSemiprimes-args.profzxP03h
+	   prog-exe +RTS -i0.001 -ki64k -pocountSemiprimes -s -p -RTS countSemiprimes
 
-	total time  =        0.54 secs   (537 ticks @ 1000 us, 1 processor)
-	total alloc = 538.602.952 bytes  (excludes profiling overheads)
-
+	total time  =        0.30 secs   (301 ticks @ 1000 us, 1 processor)
+	total alloc = 504.592.280 bytes  (excludes profiling overheads)

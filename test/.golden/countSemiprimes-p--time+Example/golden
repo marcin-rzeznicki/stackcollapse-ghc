@@ -1,0 +1,12 @@
+MAIN;CAF:primesTo8_[i];primes_[j];primes.large_[j];sieve_[j];sieve.sieve'_[j];sieve.adjust_[j] 1
+MAIN;CAF:primesTo8_[i];primes_[j];primes.large_[j];sieve_[j];sieve.sieve'_[j];sieve.adjust_[j];sieve.adjust.(...)_[j];Data.PQueue.Prio.Min.deleteFindMin;Data.PQueue.Prio.Internals.minViewWithKey;Data.PQueue.Prio.Internals.extractHeap;Data.PQueue.Prio.Internals.extractForest 1
+MAIN;CAF:primesTo8_[i];primes_[j];primes.large_[j];sieve_[j];sieve.sieve'_[j];sieve.crossoff_[j];Data.PQueue.Prio.Internals.insert 1
+MAIN;CAF:run32_[i];run_[j];countSemiprimes_[j];countSemiprimes.noOfSemiprimes_[j] 5
+MAIN;CAF:run32_[i];run_[j];countSemiprimes_[j];countSemiprimes.noOfSemiprimes_[j];Data.Vector.Fusion.Util.>>= 1
+MAIN;CAF:run32_[i];run_[j];countSemiprimes_[j];countSemiprimes.noOfSemiprimes_[j];Data.Vector.Fusion.Util.>>=;Data.Vector.Fusion.Stream.Monadic.fmap 2
+MAIN;CAF:run32_[i];run_[j];countSemiprimes_[j];countSemiprimes.noOfSemiprimes_[j];Data.Vector.Fusion.Util.>>=;Data.Vector.Fusion.Stream.Monadic.fmap;Data.Vector.Unboxed.Base.basicUnsafeWrite;Data.Vector.Primitive.Mutable.basicUnsafeWrite 4
+MAIN;CAF:run32_[i];run_[j];countSemiprimes_[j];countSemiprimes.noOfSemiprimes_[j];Data.Vector.Fusion.Util.>>=;Data.Vector.Fusion.Stream.Monadic.fmap;Data.Vector.Unboxed.Base.basicUnsafeWrite;Data.Vector.Primitive.Mutable.basicUnsafeWrite;Control.Monad.Primitive.primitive_[k] 1
+MAIN;CAF:run32_[i];run_[j];countSemiprimes_[j];countSemiprimes.noOfSemiprimes_[j];Data.Vector.Unboxed.Base.basicUnsafeIndexM;Data.Vector.Fusion.Util.>>= 2
+MAIN;CAF:run32_[i];run_[j];countSemiprimes_[j];countSemiprimes.noOfSemiprimes_[j];Data.Vector.Unboxed.Base.basicUnsafeIndexM;Data.Vector.Primitive.basicUnsafeIndexM 1
+MAIN;CAF:semiprimes_$ssemiprimes_[i];semiprimes_[j];semiprimes.\_[j];Data.List.Ordered.union 67
+MAIN;CAF:semiprimes_$ssemiprimes_[i];semiprimes_[j];semiprimes.\_[j];Data.List.Ordered.union;Data.List.Ordered.unionBy;Data.List.Ordered.unionBy.loop 215

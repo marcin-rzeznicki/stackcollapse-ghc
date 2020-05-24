@@ -1,0 +1,49 @@
+cabal-version: 2.2
+
+-- This file has been generated from package.yaml by hpack version 0.34.1.
+--
+-- see: https://github.com/sol/hpack
+
+name:           prog
+version:        0.1.0.0
+description:    This is just an example program for stackcollapse-ghc. It computes n first semiprime numbers
+homepage:       https://github.com/marcin-rzeznicki/stackcollapse-ghc#readme
+bug-reports:    https://github.com/marcin-rzeznicki/stackcollapse-ghc/issues
+author:         Marcin Rzeźnicki
+maintainer:     marcin.rzeznicki@gmail.com
+copyright:      2020 Marcin Rzeźnicki
+license:        WTFPL
+license-file:   LICENSE
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/marcin-rzeznicki/stackcollapse-ghc
+  subdir: examples
+
+library
+  exposed-modules:
+      Example
+  other-modules:
+      Paths_prog
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , data-ordlist
+    , pqueue
+    , vector
+  default-language: Haskell2010
+
+executable prog-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_prog
+  hs-source-dirs:
+      app
+  ghc-options: -O1 -threaded -rtsopts -fprof-auto -fprof-cafs
+  build-depends:
+      base >=4.7 && <5
+    , deepseq
+    , prog
+  default-language: Haskell2010

@@ -1,0 +1,7 @@
+	Sun May 24 18:56 2020 Time and Allocation Profiling Report  (Final)
+
+	   prog-exe +RTS -i0.001 -ki64k -posemiprimes -s -P -RTS semiprimes
+
+	total time  =        0.28 secs   (276 ticks @ 1000 us, 1 processor)
+	total alloc = 487,091,392 bytes  (excludes profiling overheads)
+
