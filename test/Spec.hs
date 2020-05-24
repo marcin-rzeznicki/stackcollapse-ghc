@@ -68,6 +68,11 @@ main = hspec
       $ withConfigs
         "errors"
         [defaultConfig, defaultConfig { operationMode = Alloc }]
+    context "wrong input type (-P given but the file is -p)"
+      $ stackCollapseTest "countSemiprimes" defaultConfig
+    context "wrong input type (-p given but the file is -P)"
+      $ stackCollapseTest "semiprimes"
+      $ defaultConfig { inputType = Standard }
 
 withConfigs :: String -> [StackCollapseConfig] -> Spec
 withConfigs fileStem = mapM_ (stackCollapseTest fileStem)
