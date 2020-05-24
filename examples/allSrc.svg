@@ -1,0 +1,529 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" width="1920" height="318" onload="init(evt)" viewBox="0 0 1920 318" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<!-- Flame graph stack visualization. See https://github.com/brendangregg/FlameGraph for latest version, and http://www.brendangregg.com/flamegraphs.html for examples. -->
+<!-- NOTES:  -->
+<defs>
+	<linearGradient id="background" y1="0" y2="1" x1="0" x2="0" >
+		<stop stop-color="#eeeeee" offset="5%" />
+		<stop stop-color="#eeeeb0" offset="95%" />
+	</linearGradient>
+</defs>
+<style type="text/css">
+	text { font-family:Verdana; font-size:12px; fill:rgb(0,0,0); }
+	#search, #ignorecase { opacity:0.1; cursor:pointer; }
+	#search:hover, #search.show, #ignorecase:hover, #ignorecase.show { opacity:1; }
+	#subtitle { text-anchor:middle; font-color:rgb(160,160,160); }
+	#title { text-anchor:middle; font-size:17px}
+	#unzoom { cursor:pointer; }
+	#frames > *:hover { stroke:black; stroke-width:0.5; cursor:pointer; }
+	.hide { display:none; }
+	.parent { opacity:0.5; }
+</style>
+<script type="text/ecmascript">
+<![CDATA[
+	"use strict";
+	var details, searchbtn, unzoombtn, matchedtxt, svg, searching, currentSearchTerm, ignorecase, ignorecaseBtn;
+	function init(evt) {
+		details = document.getElementById("details").firstChild;
+		searchbtn = document.getElementById("search");
+		ignorecaseBtn = document.getElementById("ignorecase");
+		unzoombtn = document.getElementById("unzoom");
+		matchedtxt = document.getElementById("matched");
+		svg = document.getElementsByTagName("svg")[0];
+		searching = 0;
+		currentSearchTerm = null;
+	}
+
+	window.addEventListener("click", function(e) {
+		var target = find_group(e.target);
+		if (target) {
+			if (target.nodeName == "a") {
+				if (e.ctrlKey === false) return;
+				e.preventDefault();
+			}
+			if (target.classList.contains("parent")) unzoom();
+			zoom(target);
+		}
+		else if (e.target.id == "unzoom") unzoom();
+		else if (e.target.id == "search") search_prompt();
+		else if (e.target.id == "ignorecase") toggle_ignorecase();
+	}, false)
+
+	// mouse-over for info
+	// show
+	window.addEventListener("mouseover", function(e) {
+		var target = find_group(e.target);
+		if (target) details.nodeValue = "Function: " + g_to_text(target);
+	}, false)
+
+	// clear
+	window.addEventListener("mouseout", function(e) {
+		var target = find_group(e.target);
+		if (target) details.nodeValue = ' ';
+	}, false)
+
+	// ctrl-F for search
+	window.addEventListener("keydown",function (e) {
+		if (e.keyCode === 114 || (e.ctrlKey && e.keyCode === 70)) {
+			e.preventDefault();
+			search_prompt();
+		}
+	}, false)
+
+	// ctrl-I to toggle case-sensitive search
+	window.addEventListener("keydown",function (e) {
+		if (e.ctrlKey && e.keyCode === 73) {
+			e.preventDefault();
+			toggle_ignorecase();
+		}
+	}, false)
+
+	// functions
+	function find_child(node, selector) {
+		var children = node.querySelectorAll(selector);
+		if (children.length) return children[0];
+		return;
+	}
+	function find_group(node) {
+		var parent = node.parentElement;
+		if (!parent) return;
+		if (parent.id == "frames") return node;
+		return find_group(parent);
+	}
+	function orig_save(e, attr, val) {
+		if (e.attributes["_orig_" + attr] != undefined) return;
+		if (e.attributes[attr] == undefined) return;
+		if (val == undefined) val = e.attributes[attr].value;
+		e.setAttribute("_orig_" + attr, val);
+	}
+	function orig_load(e, attr) {
+		if (e.attributes["_orig_"+attr] == undefined) return;
+		e.attributes[attr].value = e.attributes["_orig_" + attr].value;
+		e.removeAttribute("_orig_"+attr);
+	}
+	function g_to_text(e) {
+		var text = find_child(e, "title").firstChild.nodeValue;
+		return (text)
+	}
+	function g_to_func(e) {
+		var func = g_to_text(e);
+		// if there's any manipulation we want to do to the function
+		// name before it's searched, do it here before returning.
+		return (func);
+	}
+	function update_text(e) {
+		var r = find_child(e, "rect");
+		var t = find_child(e, "text");
+		var w = parseFloat(r.attributes.width.value) -3;
+		var txt = find_child(e, "title").textContent.replace(/\([^(]*\)$/,"");
+		t.attributes.x.value = parseFloat(r.attributes.x.value) + 3;
+
+		// Smaller than this size won't fit anything
+		if (w < 2 * 12 * 0.59) {
+			t.textContent = "";
+			return;
+		}
+
+		t.textContent = txt;
+		// Fit in full text width
+		if (/^ *$/.test(txt) || t.getSubStringLength(0, txt.length) < w)
+			return;
+
+		for (var x = txt.length - 2; x > 0; x--) {
+			if (t.getSubStringLength(0, x + 2) <= w) {
+				t.textContent = txt.substring(0, x) + "..";
+				return;
+			}
+		}
+		t.textContent = "";
+	}
+
+	// zoom
+	function zoom_reset(e) {
+		if (e.attributes != undefined) {
+			orig_load(e, "x");
+			orig_load(e, "width");
+		}
+		if (e.childNodes == undefined) return;
+		for (var i = 0, c = e.childNodes; i < c.length; i++) {
+			zoom_reset(c[i]);
+		}
+	}
+	function zoom_child(e, x, ratio) {
+		if (e.attributes != undefined) {
+			if (e.attributes.x != undefined) {
+				orig_save(e, "x");
+				e.attributes.x.value = (parseFloat(e.attributes.x.value) - x - 10) * ratio + 10;
+				if (e.tagName == "text")
+					e.attributes.x.value = find_child(e.parentNode, "rect[x]").attributes.x.value + 3;
+			}
+			if (e.attributes.width != undefined) {
+				orig_save(e, "width");
+				e.attributes.width.value = parseFloat(e.attributes.width.value) * ratio;
+			}
+		}
+
+		if (e.childNodes == undefined) return;
+		for (var i = 0, c = e.childNodes; i < c.length; i++) {
+			zoom_child(c[i], x - 10, ratio);
+		}
+	}
+	function zoom_parent(e) {
+		if (e.attributes) {
+			if (e.attributes.x != undefined) {
+				orig_save(e, "x");
+				e.attributes.x.value = 10;
+			}
+			if (e.attributes.width != undefined) {
+				orig_save(e, "width");
+				e.attributes.width.value = parseInt(svg.width.baseVal.value) - (10 * 2);
+			}
+		}
+		if (e.childNodes == undefined) return;
+		for (var i = 0, c = e.childNodes; i < c.length; i++) {
+			zoom_parent(c[i]);
+		}
+	}
+	function zoom(node) {
+		var attr = find_child(node, "rect").attributes;
+		var width = parseFloat(attr.width.value);
+		var xmin = parseFloat(attr.x.value);
+		var xmax = parseFloat(xmin + width);
+		var ymin = parseFloat(attr.y.value);
+		var ratio = (svg.width.baseVal.value - 2 * 10) / width;
+
+		// XXX: Workaround for JavaScript float issues (fix me)
+		var fudge = 0.0001;
+
+		unzoombtn.classList.remove("hide");
+
+		var el = document.getElementById("frames").children;
+		for (var i = 0; i < el.length; i++) {
+			var e = el[i];
+			var a = find_child(e, "rect").attributes;
+			var ex = parseFloat(a.x.value);
+			var ew = parseFloat(a.width.value);
+			var upstack;
+			// Is it an ancestor
+			if (0 == 0) {
+				upstack = parseFloat(a.y.value) > ymin;
+			} else {
+				upstack = parseFloat(a.y.value) < ymin;
+			}
+			if (upstack) {
+				// Direct ancestor
+				if (ex <= xmin && (ex+ew+fudge) >= xmax) {
+					e.classList.add("parent");
+					zoom_parent(e);
+					update_text(e);
+				}
+				// not in current path
+				else
+					e.classList.add("hide");
+			}
+			// Children maybe
+			else {
+				// no common path
+				if (ex < xmin || ex + fudge >= xmax) {
+					e.classList.add("hide");
+				}
+				else {
+					zoom_child(e, xmin, ratio);
+					update_text(e);
+				}
+			}
+		}
+		search();
+	}
+	function unzoom() {
+		unzoombtn.classList.add("hide");
+		var el = document.getElementById("frames").children;
+		for(var i = 0; i < el.length; i++) {
+			el[i].classList.remove("parent");
+			el[i].classList.remove("hide");
+			zoom_reset(el[i]);
+			update_text(el[i]);
+		}
+		search();
+	}
+
+	// search
+	function toggle_ignorecase() {
+		ignorecase = !ignorecase;
+		if (ignorecase) {
+			ignorecaseBtn.classList.add("show");
+		} else {
+			ignorecaseBtn.classList.remove("show");
+		}
+		reset_search();
+		search();
+	}
+	function reset_search() {
+		var el = document.querySelectorAll("#frames rect");
+		for (var i = 0; i < el.length; i++) {
+			orig_load(el[i], "fill")
+		}
+	}
+	function search_prompt() {
+		if (!searching) {
+			var term = prompt("Enter a search term (regexp " +
+			    "allowed, eg: ^ext4_)"
+			    + (ignorecase ? ", ignoring case" : "")
+			    + "\nPress Ctrl-i to toggle case sensitivity", "");
+			if (term != null) {
+				currentSearchTerm = term;
+				search();
+			}
+		} else {
+			reset_search();
+			searching = 0;
+			currentSearchTerm = null;
+			searchbtn.classList.remove("show");
+			searchbtn.firstChild.nodeValue = "Search"
+			matchedtxt.classList.add("hide");
+			matchedtxt.firstChild.nodeValue = ""
+		}
+	}
+	function search(term) {
+		if (currentSearchTerm === null) return;
+		var term = currentSearchTerm;
+
+		var re = new RegExp(term, ignorecase ? 'i' : '');
+		var el = document.getElementById("frames").children;
+		var matches = new Object();
+		var maxwidth = 0;
+		for (var i = 0; i < el.length; i++) {
+			var e = el[i];
+			var func = g_to_func(e);
+			var rect = find_child(e, "rect");
+			if (func == null || rect == null)
+				continue;
+
+			// Save max width. Only works as we have a root frame
+			var w = parseFloat(rect.attributes.width.value);
+			if (w > maxwidth)
+				maxwidth = w;
+
+			if (func.match(re)) {
+				// highlight
+				var x = parseFloat(rect.attributes.x.value);
+				orig_save(rect, "fill");
+				rect.attributes.fill.value = "rgb(230,0,230)";
+
+				// remember matches
+				if (matches[x] == undefined) {
+					matches[x] = w;
+				} else {
+					if (w > matches[x]) {
+						// overwrite with parent
+						matches[x] = w;
+					}
+				}
+				searching = 1;
+			}
+		}
+		if (!searching)
+			return;
+
+		searchbtn.classList.add("show");
+		searchbtn.firstChild.nodeValue = "Reset Search";
+
+		// calculate percent matched, excluding vertical overlap
+		var count = 0;
+		var lastx = -1;
+		var lastw = 0;
+		var keys = Array();
+		for (k in matches) {
+			if (matches.hasOwnProperty(k))
+				keys.push(k);
+		}
+		// sort the matched frames by their x location
+		// ascending, then width descending
+		keys.sort(function(a, b){
+			return a - b;
+		});
+		// Step through frames saving only the biggest bottom-up frames
+		// thanks to the sort order. This relies on the tree property
+		// where children are always smaller than their parents.
+		var fudge = 0.0001;	// JavaScript floating point
+		for (var k in keys) {
+			var x = parseFloat(keys[k]);
+			var w = matches[keys[k]];
+			if (x >= lastx + lastw - fudge) {
+				count += w;
+				lastx = x;
+				lastw = w;
+			}
+		}
+		// display matched percent
+		matchedtxt.classList.remove("hide");
+		var pct = 100 * count / maxwidth;
+		if (pct != 100) pct = pct.toFixed(1)
+		matchedtxt.firstChild.nodeValue = "Matched: " + pct + "%";
+	}
+]]>
+</script>
+<rect x="0.0" y="0" width="1920.0" height="318.0" fill="url(#background)"  />
+<text id="title" x="960.00" y="24" >Example with sources</text>
+<text id="subtitle" x="960.00" y="48" >Time</text>
+<text id="details" x="10.00" y="301" > </text>
+<text id="unzoom" x="10.00" y="24" class="hide">Reset Zoom</text>
+<text id="search" x="1810.00" y="24" >Search</text>
+<text id="ignorecase" x="1894.00" y="24" >ic</text>
+<text id="matched" x="1810.00" y="301" > </text>
+<g id="frames">
+<g >
+<title>run [app/Main.hs:(13,1)-(24,17)] (16 bytes, 5.05%)</title><rect x="10.0" y="221" width="95.9" height="15.0" fill="rgb(231,205,30)" rx="2" ry="2" />
+<text  x="13.00" y="231.5" >run [app/Ma..</text>
+</g>
+<g >
+<title>Data.Vector.Unboxed.Base.basicUnsafeIndexM [Data/Vector/Unboxed/Base.hs:376:3-73] (1 bytes, 0.32%)</title><rect x="75.9" y="173" width="6.0" height="15.0" fill="rgb(248,25,2)" rx="2" ry="2" />
+<text  x="78.93" y="183.5" ></text>
+</g>
+<g >
+<title>Data.Vector.Unboxed.Base.basicUnsafeSlice [Data/Vector/Unboxed/Base.hs:241:1016-1084] (3 bytes, 0.95%)</title><rect x="81.9" y="173" width="18.0" height="15.0" fill="rgb(238,114,18)" rx="2" ry="2" />
+<text  x="84.92" y="183.5" ></text>
+</g>
+<g >
+<title>Data.Vector.Unboxed.Base.basicUnsafeWrite [Data/Vector/Unboxed/Base.hs:241:1480-1538] (2 bytes, 0.63%)</title><rect x="63.9" y="141" width="12.0" height="15.0" fill="rgb(232,59,54)" rx="2" ry="2" />
+<text  x="66.94" y="151.5" ></text>
+</g>
+<g >
+<title>Example.semiprimes.\ [src/Example.hs:31:29-58] (296 bytes, 93.38%)</title><rect x="135.9" y="205" width="1774.1" height="15.0" fill="rgb(252,113,34)" rx="2" ry="2" />
+<text  x="138.87" y="215.5" >Example.semiprimes.\ [src/Example.hs:31:29-58]</text>
+</g>
+<g >
+<title>Example.sieve.crossoff [src/Example.hs:43:5-68] (1 bytes, 0.32%)</title><rect x="129.9" y="157" width="6.0" height="15.0" fill="rgb(213,135,27)" rx="2" ry="2" />
+<text  x="132.87" y="167.5" ></text>
+</g>
+<g >
+<title>Data.PQueue.Prio.Internals.extractForest [Data/PQueue/Prio/Internals.hs:(354,1)-(363,27)] (3 bytes, 0.95%)</title><rect x="111.9" y="77" width="18.0" height="15.0" fill="rgb(236,194,48)" rx="2" ry="2" />
+<text  x="114.89" y="87.5" ></text>
+</g>
+<g >
+<title>Example.semiprimes [src/Example.hs:(31,1)-(33,51)] (296 bytes, 93.38%)</title><rect x="135.9" y="221" width="1774.1" height="15.0" fill="rgb(224,190,0)" rx="2" ry="2" />
+<text  x="138.87" y="231.5" >Example.semiprimes [src/Example.hs:(31,1)-(33,51)]</text>
+</g>
+<g >
+<title>Example.isNSemiprime [src/Example.hs:(20,1)-(25,25)] (1 bytes, 0.32%)</title><rect x="99.9" y="173" width="6.0" height="15.0" fill="rgb(238,101,24)" rx="2" ry="2" />
+<text  x="102.91" y="183.5" ></text>
+</g>
+<g >
+<title>Data.Vector.Fusion.Util.&gt;&gt;= [Data/Vector/Fusion/Util.hs:36:3-18] (9 bytes, 2.84%)</title><rect x="22.0" y="173" width="53.9" height="15.0" fill="rgb(207,115,40)" rx="2" ry="2" />
+<text  x="24.99" y="183.5" >Data...</text>
+</g>
+<g >
+<title>Example.semiprimesTo [src/Example.hs:28:1-52] (1 bytes, 0.32%)</title><rect x="99.9" y="141" width="6.0" height="15.0" fill="rgb(243,218,6)" rx="2" ry="2" />
+<text  x="102.91" y="151.5" ></text>
+</g>
+<g >
+<title>Data.PQueue.Prio.Internals.insert [Data/PQueue/Prio/Internals.hs:150:1-21] (1 bytes, 0.32%)</title><rect x="129.9" y="141" width="6.0" height="15.0" fill="rgb(210,57,29)" rx="2" ry="2" />
+<text  x="132.87" y="151.5" ></text>
+</g>
+<g >
+<title>Data.PQueue.Prio.Internals.extractHeap [Data/PQueue/Prio/Internals.hs:(312,1)-(314,48)] (3 bytes, 0.95%)</title><rect x="111.9" y="93" width="18.0" height="15.0" fill="rgb(238,217,25)" rx="2" ry="2" />
+<text  x="114.89" y="103.5" ></text>
+</g>
+<g >
+<title>Example.sieve.sieve' [src/Example.hs:(49,5)-(52,46)] (5 bytes, 1.58%)</title><rect x="105.9" y="173" width="30.0" height="15.0" fill="rgb(226,32,19)" rx="2" ry="2" />
+<text  x="108.90" y="183.5" >Ex..</text>
+</g>
+<g >
+<title>Example.countSemiprimes [src/Example.hs:(12,1)-(17,22)] (16 bytes, 5.05%)</title><rect x="10.0" y="205" width="95.9" height="15.0" fill="rgb(226,5,42)" rx="2" ry="2" />
+<text  x="13.00" y="215.5" >Example.cou..</text>
+</g>
+<g >
+<title>Example.primesTo [src/Example.hs:36:1-44] (1 bytes, 0.32%)</title><rect x="1904.0" y="173" width="6.0" height="15.0" fill="rgb(230,88,35)" rx="2" ry="2" />
+<text  x="1907.01" y="183.5" ></text>
+</g>
+<g >
+<title>all (317 bytes, 100%)</title><rect x="10.0" y="269" width="1900.0" height="15.0" fill="rgb(209,93,29)" rx="2" ry="2" />
+<text  x="13.00" y="279.5" ></text>
+</g>
+<g >
+<title>CAF:run32 (16 bytes, 5.05%)</title><rect x="10.0" y="237" width="95.9" height="15.0" fill="rgb(244,92,0)" rx="2" ry="2" />
+<text  x="13.00" y="247.5" >CAF:run32</text>
+</g>
+<g >
+<title>Example.semiprimes.facts [src/Example.hs:33:5-51] (1 bytes, 0.32%)</title><rect x="1904.0" y="189" width="6.0" height="15.0" fill="rgb(232,62,27)" rx="2" ry="2" />
+<text  x="1907.01" y="199.5" ></text>
+</g>
+<g >
+<title>Data.PQueue.Prio.Min.deleteFindMin [Data/PQueue/Prio/Min.hs:198:1-98] (3 bytes, 0.95%)</title><rect x="111.9" y="125" width="18.0" height="15.0" fill="rgb(234,36,38)" rx="2" ry="2" />
+<text  x="114.89" y="135.5" ></text>
+</g>
+<g >
+<title>Example.CAF:primesTo8 (5 bytes, 1.58%)</title><rect x="105.9" y="237" width="30.0" height="15.0" fill="rgb(248,78,36)" rx="2" ry="2" />
+<text  x="108.90" y="247.5" >Ex..</text>
+</g>
+<g >
+<title>Example.CAF:semiprimes_$ssemiprimes (296 bytes, 93.38%)</title><rect x="135.9" y="237" width="1774.1" height="15.0" fill="rgb(221,87,30)" rx="2" ry="2" />
+<text  x="138.87" y="247.5" >Example.CAF:semiprimes_$ssemiprimes</text>
+</g>
+<g >
+<title>Data.PQueue.Prio.Internals.minViewWithKey [Data/PQueue/Prio/Internals.hs:(209,1)-(210,70)] (3 bytes, 0.95%)</title><rect x="111.9" y="109" width="18.0" height="15.0" fill="rgb(215,161,26)" rx="2" ry="2" />
+<text  x="114.89" y="119.5" ></text>
+</g>
+<g >
+<title>Example.countSemiprimes.noOfSemiprimes [src/Example.hs:(15,5)-(17,22)] (16 bytes, 5.05%)</title><rect x="10.0" y="189" width="95.9" height="15.0" fill="rgb(249,9,54)" rx="2" ry="2" />
+<text  x="13.00" y="199.5" >Example.cou..</text>
+</g>
+<g >
+<title>Data.List.Ordered.unionBy.loop [Data/List/Ordered.hs:(237,6)-(243,34)] (218 bytes, 68.77%)</title><rect x="597.4" y="157" width="1306.6" height="15.0" fill="rgb(231,15,31)" rx="2" ry="2" />
+<text  x="600.38" y="167.5" >Data.List.Ordered.unionBy.loop [Data/List/Ordered.hs:(237,6)-(243,34)]</text>
+</g>
+<g >
+<title>Data.Vector.Primitive.Mutable.basicUnsafeSlice [Data/Vector/Primitive/Mutable.hs:(94,3)-(95,25)] (3 bytes, 0.95%)</title><rect x="81.9" y="157" width="18.0" height="15.0" fill="rgb(251,130,50)" rx="2" ry="2" />
+<text  x="84.92" y="167.5" ></text>
+</g>
+<g >
+<title>Example.primes [src/Example.hs:(61,1)-(117,55)] (5 bytes, 1.58%)</title><rect x="105.9" y="221" width="30.0" height="15.0" fill="rgb(248,21,31)" rx="2" ry="2" />
+<text  x="108.90" y="231.5" >Ex..</text>
+</g>
+<g >
+<title>Example.isNSemiprime.nSemiprimes [src/Example.hs:23:9-40] (1 bytes, 0.32%)</title><rect x="99.9" y="157" width="6.0" height="15.0" fill="rgb(205,190,30)" rx="2" ry="2" />
+<text  x="102.91" y="167.5" ></text>
+</g>
+<g >
+<title>MAIN (317 bytes, 100.00%)</title><rect x="10.0" y="253" width="1900.0" height="15.0" fill="rgb(220,113,43)" rx="2" ry="2" />
+<text  x="13.00" y="263.5" >MAIN</text>
+</g>
+<g >
+<title>Data.PQueue.Prio.Internals.extractForest.&lt;? [Data/PQueue/Prio/Internals.hs:363:5-27] (1 bytes, 0.32%)</title><rect x="123.9" y="61" width="6.0" height="15.0" fill="rgb(239,120,5)" rx="2" ry="2" />
+<text  x="126.88" y="71.5" ></text>
+</g>
+<g >
+<title>Example.primes.large [src/Example.hs:65:5-37] (5 bytes, 1.58%)</title><rect x="105.9" y="205" width="30.0" height="15.0" fill="rgb(219,94,34)" rx="2" ry="2" />
+<text  x="108.90" y="215.5" >Ex..</text>
+</g>
+<g >
+<title>Data.Vector.Primitive.Mutable.basicUnsafeWrite [Data/Vector/Primitive/Mutable.hs:124:3-69] (2 bytes, 0.63%)</title><rect x="63.9" y="125" width="12.0" height="15.0" fill="rgb(207,6,46)" rx="2" ry="2" />
+<text  x="66.94" y="135.5" ></text>
+</g>
+<g >
+<title>Data.List.Ordered.union [Data/List/Ordered.hs:231:1-23] (295 bytes, 93.06%)</title><rect x="135.9" y="189" width="1768.1" height="15.0" fill="rgb(247,182,21)" rx="2" ry="2" />
+<text  x="138.87" y="199.5" >Data.List.Ordered.union [Data/List/Ordered.hs:231:1-23]</text>
+</g>
+<g >
+<title>Data.List.Ordered.unionBy [Data/List/Ordered.hs:(235,1)-(243,34)] (218 bytes, 68.77%)</title><rect x="597.4" y="173" width="1306.6" height="15.0" fill="rgb(227,54,9)" rx="2" ry="2" />
+<text  x="600.38" y="183.5" >Data.List.Ordered.unionBy [Data/List/Ordered.hs:(235,1)-(243,34)]</text>
+</g>
+<g >
+<title>Example.sieve.adjust.(...) [src/Example.hs:58:9-53] (4 bytes, 1.26%)</title><rect x="105.9" y="141" width="24.0" height="15.0" fill="rgb(209,151,9)" rx="2" ry="2" />
+<text  x="108.90" y="151.5" >E..</text>
+</g>
+<g >
+<title>Example.sieve [src/Example.hs:(40,1)-(58,53)] (5 bytes, 1.58%)</title><rect x="105.9" y="189" width="30.0" height="15.0" fill="rgb(228,67,41)" rx="2" ry="2" />
+<text  x="108.90" y="199.5" >Ex..</text>
+</g>
+<g >
+<title>Example.sieve.adjust [src/Example.hs:(54,5)-(58,53)] (4 bytes, 1.26%)</title><rect x="105.9" y="157" width="24.0" height="15.0" fill="rgb(206,88,19)" rx="2" ry="2" />
+<text  x="108.90" y="167.5" >E..</text>
+</g>
+<g >
+<title>Data.Vector.Fusion.Stream.Monadic.fmap [Data/Vector/Fusion/Stream/Monadic.hs:(133,3)-(135,20)] (5 bytes, 1.58%)</title><rect x="46.0" y="157" width="29.9" height="15.0" fill="rgb(243,74,40)" rx="2" ry="2" />
+<text  x="48.96" y="167.5" >Da..</text>
+</g>
+</g>
+</svg>
