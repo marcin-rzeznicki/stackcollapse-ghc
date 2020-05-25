@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" width="1920" height="318" onload="init(evt)" viewBox="0 0 1920 318" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg version="1.1" width="1200" height="334" onload="init(evt)" viewBox="0 0 1200 334" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <!-- Flame graph stack visualization. See https://github.com/brendangregg/FlameGraph for latest version, and http://www.brendangregg.com/flamegraphs.html for examples. -->
 <!-- NOTES:  -->
 <defs>
@@ -364,166 +364,170 @@
 	}
 ]]>
 </script>
-<rect x="0.0" y="0" width="1920.0" height="318.0" fill="url(#background)"  />
-<text id="title" x="960.00" y="24" >Example with sources</text>
-<text id="subtitle" x="960.00" y="48" >Time</text>
-<text id="details" x="10.00" y="301" > </text>
+<rect x="0.0" y="0" width="1200.0" height="334.0" fill="url(#background)"  />
+<text id="title" x="600.00" y="24" >Example with sources</text>
+<text id="subtitle" x="600.00" y="48" >Time</text>
+<text id="details" x="10.00" y="317" > </text>
 <text id="unzoom" x="10.00" y="24" class="hide">Reset Zoom</text>
-<text id="search" x="1810.00" y="24" >Search</text>
-<text id="ignorecase" x="1894.00" y="24" >ic</text>
-<text id="matched" x="1810.00" y="301" > </text>
+<text id="search" x="1090.00" y="24" >Search</text>
+<text id="ignorecase" x="1174.00" y="24" >ic</text>
+<text id="matched" x="1090.00" y="317" > </text>
 <g id="frames">
 <g >
-<title>isNSemiprime.nSemiprimes [src/Example.hs:23:9-40] (1 bytes, 0.32%)</title><rect x="129.9" y="157" width="6.0" height="15.0" fill="rgb(228,136,22)" rx="2" ry="2" />
-<text  x="132.87" y="167.5" ></text>
+<title>Data.PQueue.Prio.Internals.extractForest (3 bytes, 1.01%)</title><rect x="10.0" y="93" width="11.9" height="15.0" fill="rgb(235,29,9)" rx="2" ry="2" />
+<text  x="13.00" y="103.5" ></text>
 </g>
 <g >
-<title>Data.PQueue.Prio.Internals.extractHeap (3 bytes, 0.95%)</title><rect x="16.0" y="93" width="18.0" height="15.0" fill="rgb(205,42,36)" rx="2" ry="2" />
-<text  x="18.99" y="103.5" ></text>
+<title>Data.Vector.Fusion.Util.&gt;&gt;= (9 bytes, 3.02%)</title><rect x="53.6" y="189" width="35.6" height="15.0" fill="rgb(210,185,5)" rx="2" ry="2" />
+<text  x="56.56" y="199.5" >Dat..</text>
 </g>
 <g >
-<title>Data.PQueue.Prio.Internals.minViewWithKey (3 bytes, 0.95%)</title><rect x="16.0" y="109" width="18.0" height="15.0" fill="rgb(228,191,38)" rx="2" ry="2" />
-<text  x="18.99" y="119.5" ></text>
+<title>Data.Vector.Fusion.Stream.Monadic.fmap (4 bytes, 1.34%)</title><rect x="73.4" y="173" width="15.8" height="15.0" fill="rgb(241,120,18)" rx="2" ry="2" />
+<text  x="76.36" y="183.5" ></text>
 </g>
 <g >
-<title>sieve.adjust [src/Example.hs:(54,5)-(58,53)] (4 bytes, 1.26%)</title><rect x="10.0" y="157" width="24.0" height="15.0" fill="rgb(209,144,26)" rx="2" ry="2" />
-<text  x="13.00" y="167.5" >s..</text>
+<title>all (298 bytes, 100%)</title><rect x="10.0" y="285" width="1180.0" height="15.0" fill="rgb(205,177,26)" rx="2" ry="2" />
+<text  x="13.00" y="295.5" ></text>
 </g>
 <g >
-<title>semiprimes [src/Example.hs:(31,1)-(33,51)] (296 bytes, 93.38%)</title><rect x="135.9" y="221" width="1774.1" height="15.0" fill="rgb(253,135,16)" rx="2" ry="2" />
-<text  x="138.87" y="231.5" >semiprimes [src/Example.hs:(31,1)-(33,51)]</text>
+<title>Data.List.Ordered.unionBy (200 bytes, 67.11%)</title><rect x="394.1" y="189" width="791.9" height="15.0" fill="rgb(247,43,50)" rx="2" ry="2" />
+<text  x="397.09" y="199.5" >Data.List.Ordered.unionBy</text>
 </g>
 <g >
-<title>primes [src/Example.hs:(61,1)-(117,55)] (5 bytes, 1.58%)</title><rect x="10.0" y="221" width="30.0" height="15.0" fill="rgb(214,161,0)" rx="2" ry="2" />
-<text  x="13.00" y="231.5" >pr..</text>
+<title>countSemiprimes [src/Example.hs:(12,1)-(17,22)] (19 bytes, 6.38%)</title><rect x="29.8" y="221" width="75.2" height="15.0" fill="rgb(216,214,11)" rx="2" ry="2" />
+<text  x="32.80" y="231.5" >countSem..</text>
 </g>
 <g >
-<title>Data.Vector.Unboxed.Base.basicUnsafeWrite (2 bytes, 0.63%)</title><rect x="93.9" y="141" width="12.0" height="15.0" fill="rgb(248,201,35)" rx="2" ry="2" />
-<text  x="96.91" y="151.5" ></text>
+<title>semiprimes.\ [src/Example.hs:31:29-58] (274 bytes, 91.95%)</title><rect x="105.0" y="221" width="1085.0" height="15.0" fill="rgb(243,5,46)" rx="2" ry="2" />
+<text  x="108.03" y="231.5" >semiprimes.\ [src/Example.hs:31:29-58]</text>
 </g>
 <g >
-<title>isNSemiprime [src/Example.hs:(20,1)-(25,25)] (1 bytes, 0.32%)</title><rect x="129.9" y="173" width="6.0" height="15.0" fill="rgb(245,193,28)" rx="2" ry="2" />
-<text  x="132.87" y="183.5" ></text>
+<title>Data.Vector.Unboxed.Base.basicUnsafeWrite (1 bytes, 0.34%)</title><rect x="101.1" y="157" width="3.9" height="15.0" fill="rgb(245,110,35)" rx="2" ry="2" />
+<text  x="104.07" y="167.5" ></text>
 </g>
 <g >
-<title>countSemiprimes [src/Example.hs:(12,1)-(17,22)] (16 bytes, 5.05%)</title><rect x="40.0" y="205" width="95.9" height="15.0" fill="rgb(240,84,31)" rx="2" ry="2" />
-<text  x="42.97" y="215.5" >countSemipr..</text>
+<title>Data.PQueue.Prio.Internals.minViewWithKey (3 bytes, 1.01%)</title><rect x="10.0" y="125" width="11.9" height="15.0" fill="rgb(228,68,28)" rx="2" ry="2" />
+<text  x="13.00" y="135.5" ></text>
 </g>
 <g >
-<title>sieve [src/Example.hs:(40,1)-(58,53)] (5 bytes, 1.58%)</title><rect x="10.0" y="189" width="30.0" height="15.0" fill="rgb(224,228,40)" rx="2" ry="2" />
-<text  x="13.00" y="199.5" >si..</text>
+<title>primes [src/Example.hs:(61,1)-(117,55)] (5 bytes, 1.68%)</title><rect x="10.0" y="237" width="19.8" height="15.0" fill="rgb(254,122,25)" rx="2" ry="2" />
+<text  x="13.00" y="247.5" ></text>
 </g>
 <g >
-<title>Data.PQueue.Prio.Internals.insert (1 bytes, 0.32%)</title><rect x="34.0" y="141" width="6.0" height="15.0" fill="rgb(228,120,15)" rx="2" ry="2" />
-<text  x="36.97" y="151.5" ></text>
+<title>sieve.adjust [src/Example.hs:(54,5)-(58,53)] (4 bytes, 1.34%)</title><rect x="10.0" y="173" width="15.8" height="15.0" fill="rgb(248,177,26)" rx="2" ry="2" />
+<text  x="13.00" y="183.5" ></text>
 </g>
 <g >
-<title>Data.Vector.Primitive.Mutable.basicUnsafeWrite (2 bytes, 0.63%)</title><rect x="93.9" y="125" width="12.0" height="15.0" fill="rgb(216,180,35)" rx="2" ry="2" />
-<text  x="96.91" y="135.5" ></text>
+<title>Data.List.Ordered.union (273 bytes, 91.61%)</title><rect x="105.0" y="205" width="1081.0" height="15.0" fill="rgb(221,159,39)" rx="2" ry="2" />
+<text  x="108.03" y="215.5" >Data.List.Ordered.union</text>
 </g>
 <g >
-<title>primesTo [src/Example.hs:36:1-44] (1 bytes, 0.32%)</title><rect x="1904.0" y="173" width="6.0" height="15.0" fill="rgb(218,107,54)" rx="2" ry="2" />
-<text  x="1907.01" y="183.5" ></text>
+<title>sieve.reinsert [src/Example.hs:47:5-56] (1 bytes, 0.34%)</title><rect x="21.9" y="157" width="3.9" height="15.0" fill="rgb(251,188,45)" rx="2" ry="2" />
+<text  x="24.88" y="167.5" ></text>
 </g>
 <g >
-<title>Data.PQueue.Prio.Min.deleteFindMin (3 bytes, 0.95%)</title><rect x="16.0" y="125" width="18.0" height="15.0" fill="rgb(252,11,9)" rx="2" ry="2" />
-<text  x="18.99" y="135.5" ></text>
+<title>Data.Vector.Unboxed.Base.basicUnsafeIndexM (3 bytes, 1.01%)</title><rect x="89.2" y="189" width="11.9" height="15.0" fill="rgb(222,186,2)" rx="2" ry="2" />
+<text  x="92.19" y="199.5" ></text>
 </g>
 <g >
-<title>Data.Vector.Unboxed.Base.basicUnsafeSlice (3 bytes, 0.95%)</title><rect x="111.9" y="173" width="18.0" height="15.0" fill="rgb(218,168,39)" rx="2" ry="2" />
-<text  x="114.89" y="183.5" ></text>
+<title>Data.PQueue.Prio.Internals.insert (1 bytes, 0.34%)</title><rect x="25.8" y="157" width="4.0" height="15.0" fill="rgb(209,38,2)" rx="2" ry="2" />
+<text  x="28.84" y="167.5" ></text>
 </g>
 <g >
-<title>sieve.crossoff [src/Example.hs:43:5-68] (1 bytes, 0.32%)</title><rect x="34.0" y="157" width="6.0" height="15.0" fill="rgb(208,168,52)" rx="2" ry="2" />
-<text  x="36.97" y="167.5" ></text>
+<title>semiprimes [src/Example.hs:(31,1)-(33,51)] (274 bytes, 91.95%)</title><rect x="105.0" y="237" width="1085.0" height="15.0" fill="rgb(225,97,19)" rx="2" ry="2" />
+<text  x="108.03" y="247.5" >semiprimes [src/Example.hs:(31,1)-(33,51)]</text>
 </g>
 <g >
-<title>Data.Vector.Primitive.Mutable.basicUnsafeSlice (3 bytes, 0.95%)</title><rect x="111.9" y="157" width="18.0" height="15.0" fill="rgb(208,95,1)" rx="2" ry="2" />
-<text  x="114.89" y="167.5" ></text>
+<title>CAF:semiprimes_$ssemiprimes (274 bytes, 91.95%)</title><rect x="105.0" y="253" width="1085.0" height="15.0" fill="rgb(222,94,20)" rx="2" ry="2" />
+<text  x="108.03" y="263.5" >CAF:semiprimes_$ssemiprimes</text>
 </g>
 <g >
-<title>Data.List.Ordered.unionBy (218 bytes, 68.77%)</title><rect x="597.4" y="173" width="1306.6" height="15.0" fill="rgb(220,138,8)" rx="2" ry="2" />
-<text  x="600.38" y="183.5" >Data.List.Ordered.unionBy</text>
+<title>countSemiprimes.noOfSemiprimes [src/Example.hs:(15,5)-(17,22)] (19 bytes, 6.38%)</title><rect x="29.8" y="205" width="75.2" height="15.0" fill="rgb(244,117,11)" rx="2" ry="2" />
+<text  x="32.80" y="215.5" >countSem..</text>
 </g>
 <g >
-<title>all (317 bytes, 100%)</title><rect x="10.0" y="269" width="1900.0" height="15.0" fill="rgb(237,113,19)" rx="2" ry="2" />
-<text  x="13.00" y="279.5" ></text>
+<title>CAF:run32 (19 bytes, 6.38%)</title><rect x="29.8" y="253" width="75.2" height="15.0" fill="rgb(224,123,40)" rx="2" ry="2" />
+<text  x="32.80" y="263.5" >CAF:run32</text>
 </g>
 <g >
-<title>semiprimesTo [src/Example.hs:28:1-52] (1 bytes, 0.32%)</title><rect x="129.9" y="141" width="6.0" height="15.0" fill="rgb(236,116,47)" rx="2" ry="2" />
-<text  x="132.87" y="151.5" ></text>
+<title>Data.PQueue.Prio.Min.deleteFindMin (3 bytes, 1.01%)</title><rect x="10.0" y="141" width="11.9" height="15.0" fill="rgb(220,157,52)" rx="2" ry="2" />
+<text  x="13.00" y="151.5" ></text>
 </g>
 <g >
-<title>Data.Vector.Fusion.Util.&gt;&gt;= (9 bytes, 2.84%)</title><rect x="52.0" y="173" width="53.9" height="15.0" fill="rgb(205,78,9)" rx="2" ry="2" />
-<text  x="54.96" y="183.5" >Data...</text>
+<title>Data.PQueue.Prio.Internals.insert (1 bytes, 0.34%)</title><rect x="21.9" y="141" width="3.9" height="15.0" fill="rgb(245,40,34)" rx="2" ry="2" />
+<text  x="24.88" y="151.5" ></text>
 </g>
 <g >
-<title>CAF:primesTo8 (5 bytes, 1.58%)</title><rect x="10.0" y="237" width="30.0" height="15.0" fill="rgb(250,216,26)" rx="2" ry="2" />
-<text  x="13.00" y="247.5" >CA..</text>
+<title>Data.List.Ordered.unionBy.loop (200 bytes, 67.11%)</title><rect x="394.1" y="173" width="791.9" height="15.0" fill="rgb(239,201,49)" rx="2" ry="2" />
+<text  x="397.09" y="183.5" >Data.List.Ordered.unionBy.loop</text>
 </g>
 <g >
-<title>Data.List.Ordered.unionBy.loop (218 bytes, 68.77%)</title><rect x="597.4" y="157" width="1306.6" height="15.0" fill="rgb(219,87,26)" rx="2" ry="2" />
-<text  x="600.38" y="167.5" >Data.List.Ordered.unionBy.loop</text>
+<title>sieve.crossoff [src/Example.hs:43:5-68] (1 bytes, 0.34%)</title><rect x="25.8" y="173" width="4.0" height="15.0" fill="rgb(208,215,12)" rx="2" ry="2" />
+<text  x="28.84" y="183.5" ></text>
 </g>
 <g >
-<title>primes.large [src/Example.hs:65:5-37] (5 bytes, 1.58%)</title><rect x="10.0" y="205" width="30.0" height="15.0" fill="rgb(221,9,1)" rx="2" ry="2" />
-<text  x="13.00" y="215.5" >pr..</text>
+<title>sieve.sieve' [src/Example.hs:(49,5)-(52,46)] (5 bytes, 1.68%)</title><rect x="10.0" y="189" width="19.8" height="15.0" fill="rgb(214,215,26)" rx="2" ry="2" />
+<text  x="13.00" y="199.5" ></text>
 </g>
 <g >
-<title>semiprimes.facts [src/Example.hs:33:5-51] (1 bytes, 0.32%)</title><rect x="1904.0" y="189" width="6.0" height="15.0" fill="rgb(239,43,48)" rx="2" ry="2" />
-<text  x="1907.01" y="199.5" ></text>
+<title>MAIN (298 bytes, 100.00%)</title><rect x="10.0" y="269" width="1180.0" height="15.0" fill="rgb(207,202,19)" rx="2" ry="2" />
+<text  x="13.00" y="279.5" >MAIN</text>
 </g>
 <g >
-<title>sieve.adjust.(...) [src/Example.hs:58:9-53] (4 bytes, 1.26%)</title><rect x="10.0" y="141" width="24.0" height="15.0" fill="rgb(214,216,47)" rx="2" ry="2" />
-<text  x="13.00" y="151.5" >s..</text>
+<title>primesTo [src/Example.hs:36:1-44] (1 bytes, 0.34%)</title><rect x="1186.0" y="189" width="4.0" height="15.0" fill="rgb(212,83,10)" rx="2" ry="2" />
+<text  x="1189.04" y="199.5" ></text>
 </g>
 <g >
-<title>sieve.sieve' [src/Example.hs:(49,5)-(52,46)] (5 bytes, 1.58%)</title><rect x="10.0" y="173" width="30.0" height="15.0" fill="rgb(227,19,31)" rx="2" ry="2" />
-<text  x="13.00" y="183.5" >si..</text>
+<title>Data.PQueue.Prio.Internals.extractHeap (3 bytes, 1.01%)</title><rect x="10.0" y="109" width="11.9" height="15.0" fill="rgb(205,113,14)" rx="2" ry="2" />
+<text  x="13.00" y="119.5" ></text>
 </g>
 <g >
-<title>semiprimes.\ [src/Example.hs:31:29-58] (296 bytes, 93.38%)</title><rect x="135.9" y="205" width="1774.1" height="15.0" fill="rgb(220,138,36)" rx="2" ry="2" />
-<text  x="138.87" y="215.5" >semiprimes.\ [src/Example.hs:31:29-58]</text>
+<title>sieve.adjust.(...) [src/Example.hs:58:9-53] (3 bytes, 1.01%)</title><rect x="10.0" y="157" width="11.9" height="15.0" fill="rgb(232,163,51)" rx="2" ry="2" />
+<text  x="13.00" y="167.5" ></text>
 </g>
 <g >
-<title>Data.PQueue.Prio.Internals.extractForest.&lt;? (1 bytes, 0.32%)</title><rect x="28.0" y="61" width="6.0" height="15.0" fill="rgb(252,180,44)" rx="2" ry="2" />
-<text  x="30.98" y="71.5" ></text>
+<title>isNSemiprime.\ [src/Example.hs:24:30-57] (1 bytes, 0.34%)</title><rect x="101.1" y="173" width="3.9" height="15.0" fill="rgb(233,133,37)" rx="2" ry="2" />
+<text  x="104.07" y="183.5" ></text>
 </g>
 <g >
-<title>countSemiprimes.noOfSemiprimes [src/Example.hs:(15,5)-(17,22)] (16 bytes, 5.05%)</title><rect x="40.0" y="189" width="95.9" height="15.0" fill="rgb(230,88,44)" rx="2" ry="2" />
-<text  x="42.97" y="199.5" >countSemipr..</text>
+<title>sieve [src/Example.hs:(40,1)-(58,53)] (5 bytes, 1.68%)</title><rect x="10.0" y="205" width="19.8" height="15.0" fill="rgb(228,16,9)" rx="2" ry="2" />
+<text  x="13.00" y="215.5" ></text>
 </g>
 <g >
-<title>Data.Vector.Fusion.Stream.Monadic.fmap (5 bytes, 1.58%)</title><rect x="75.9" y="157" width="30.0" height="15.0" fill="rgb(224,158,14)" rx="2" ry="2" />
-<text  x="78.93" y="167.5" >Da..</text>
+<title>run [app/Main.hs:(13,1)-(24,17)] (19 bytes, 6.38%)</title><rect x="29.8" y="237" width="75.2" height="15.0" fill="rgb(240,216,10)" rx="2" ry="2" />
+<text  x="32.80" y="247.5" >run [app..</text>
 </g>
 <g >
-<title>CAF:semiprimes_$ssemiprimes (296 bytes, 93.38%)</title><rect x="135.9" y="237" width="1774.1" height="15.0" fill="rgb(209,98,21)" rx="2" ry="2" />
-<text  x="138.87" y="247.5" >CAF:semiprimes_$ssemiprimes</text>
+<title>Data.Vector.Fusion.Util.&gt;&gt;= (3 bytes, 1.01%)</title><rect x="89.2" y="173" width="11.9" height="15.0" fill="rgb(252,43,3)" rx="2" ry="2" />
+<text  x="92.19" y="183.5" ></text>
 </g>
 <g >
-<title>run [app/Main.hs:(13,1)-(24,17)] (16 bytes, 5.05%)</title><rect x="40.0" y="221" width="95.9" height="15.0" fill="rgb(243,49,23)" rx="2" ry="2" />
-<text  x="42.97" y="231.5" >run [app/Ma..</text>
+<title>Data.PQueue.Prio.Internals.incrExtract (2 bytes, 0.67%)</title><rect x="14.0" y="77" width="7.9" height="15.0" fill="rgb(206,4,12)" rx="2" ry="2" />
+<text  x="16.96" y="87.5" ></text>
 </g>
 <g >
-<title>CAF:run32 (16 bytes, 5.05%)</title><rect x="40.0" y="237" width="95.9" height="15.0" fill="rgb(243,151,38)" rx="2" ry="2" />
-<text  x="42.97" y="247.5" >CAF:run32</text>
+<title>isNSemiprime [src/Example.hs:(20,1)-(25,25)] (1 bytes, 0.34%)</title><rect x="101.1" y="189" width="3.9" height="15.0" fill="rgb(230,34,32)" rx="2" ry="2" />
+<text  x="104.07" y="199.5" ></text>
 </g>
 <g >
-<title>Data.List.Ordered.union (295 bytes, 93.06%)</title><rect x="135.9" y="189" width="1768.1" height="15.0" fill="rgb(253,195,5)" rx="2" ry="2" />
-<text  x="138.87" y="199.5" >Data.List.Ordered.union</text>
+<title>CAF:primesTo8 (5 bytes, 1.68%)</title><rect x="10.0" y="253" width="19.8" height="15.0" fill="rgb(249,138,53)" rx="2" ry="2" />
+<text  x="13.00" y="263.5" ></text>
 </g>
 <g >
-<title>MAIN (317 bytes, 100.00%)</title><rect x="10.0" y="253" width="1900.0" height="15.0" fill="rgb(248,220,20)" rx="2" ry="2" />
-<text  x="13.00" y="263.5" >MAIN</text>
+<title>Data.PQueue.Prio.Internals.incr (2 bytes, 0.67%)</title><rect x="14.0" y="61" width="7.9" height="15.0" fill="rgb(252,180,42)" rx="2" ry="2" />
+<text  x="16.96" y="71.5" ></text>
 </g>
 <g >
-<title>Data.PQueue.Prio.Internals.extractForest (3 bytes, 0.95%)</title><rect x="16.0" y="77" width="18.0" height="15.0" fill="rgb(251,198,11)" rx="2" ry="2" />
-<text  x="18.99" y="87.5" ></text>
+<title>semiprimes.facts [src/Example.hs:33:5-51] (1 bytes, 0.34%)</title><rect x="1186.0" y="205" width="4.0" height="15.0" fill="rgb(230,45,4)" rx="2" ry="2" />
+<text  x="1189.04" y="215.5" ></text>
 </g>
 <g >
-<title>Data.Vector.Unboxed.Base.basicUnsafeIndexM (1 bytes, 0.32%)</title><rect x="105.9" y="173" width="6.0" height="15.0" fill="rgb(253,57,40)" rx="2" ry="2" />
-<text  x="108.90" y="183.5" ></text>
+<title>Data.PQueue.Prio.Internals.extractForest.&lt;? (1 bytes, 0.34%)</title><rect x="10.0" y="77" width="4.0" height="15.0" fill="rgb(240,95,43)" rx="2" ry="2" />
+<text  x="13.00" y="87.5" ></text>
+</g>
+<g >
+<title>primes.large [src/Example.hs:65:5-37] (5 bytes, 1.68%)</title><rect x="10.0" y="221" width="19.8" height="15.0" fill="rgb(239,63,26)" rx="2" ry="2" />
+<text  x="13.00" y="231.5" ></text>
 </g>
 </g>
 </svg>
