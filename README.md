@@ -46,7 +46,7 @@ If you have a standard prof file (`-p` RTS option)
 stackcollapse-ghc -p prof_file | flamegraph.pl --title 'Example' --subtitle 'Time' --countname ticks > path_to_svg
 ```
 
-![Ticks](https://github.com/marcin-rzeznicki/stackcollapse-ghc/tree/master/examples/basicTime.svg)
+![Ticks](./examples/basicTime.svg)
 
 ### Visualize allocations
 
@@ -62,7 +62,7 @@ If you have a standard prof file (`-p` RTS option)
 stackcollapse-ghc --alloc -p prof_file | flamegraph.pl --title 'Example' --subtitle 'Bytes allocated' --countname bytes > path_to_svg
 ```
 
-![Bytes](https://github.com/marcin-rzeznicki/stackcollapse-ghc/tree/master/examples/basicAlloc.svg)
+![Bytes](./examples/basicAlloc.svg)
 
 ## Cookbook
 
@@ -76,7 +76,7 @@ stackcollapse-ghc -u Example prof_file | flamegraph.pl --title 'Example with col
 
 (the traces coming from your modules are green under this palette)
 
-![JavaColor](https://github.com/marcin-rzeznicki/stackcollapse-ghc/tree/master/examples/javaColor.svg)
+![JavaColor](./examples/javaColor.svg)
 
 Or you can use the `mem` pallette to track allocations
 
@@ -84,7 +84,7 @@ Or you can use the `mem` pallette to track allocations
 stackcollapse-ghc -u Example --alloc -p prof_file | flamegraph.pl --title 'Example with colors' --subtitle 'Bytes allocated' --countname bytes --color mem > path_to_svg
 ```
 
-![MemColor](https://github.com/marcin-rzeznicki/stackcollapse-ghc/tree/master/examples/memColor.svg)
+![MemColor](./examples/memColor.svg)
 
 This is achieved by using a thing called _annotations_. `stackcollapse-ghc` adds the annotation `_[j]` to traces from modules in `-u`, `_[i]` to _CAFs_ and `_[k]` to the "kernel" modules, such as `GHC` or `System`
 
@@ -96,7 +96,7 @@ You might want to tone down the visual clutter in your flamegraph by turning off
 stackcollapse-ghc -u Example -p prof_file | flamegraph.pl --title 'Example' --subtitle 'Time' --countname ticks > path_to_svg
 ```
 
-![UserModules](https://github.com/marcin-rzeznicki/stackcollapse-ghc/tree/master/examples/userModules.svg)
+![UserModules](./examples/userModules.svg)
 
 If you want to use visual indications *and* retain qualified names you can use the following option
 
@@ -112,7 +112,7 @@ If you want to see the source of the traces on the generated flamegraph, you can
 stackcollapse-ghc -s -u Example prof_file | flamegraph.pl --title 'Example with sources' --subtitle 'Time' --countname ticks > path_to_svg
 ```
 
-![UserSources](https://github.com/marcin-rzeznicki/stackcollapse-ghc/tree/master/examples/userSrc.svg)
+![UserSources](./examples/userSrc.svg)
 
 Alternatively, you can simply include it for all traces (with or without `-u` depending on whether you need it for something else, such as colors or qualified names)
 
@@ -120,7 +120,7 @@ Alternatively, you can simply include it for all traces (with or without `-u` de
 stackcollapse-ghc -S prof_file | flamegraph.pl --title 'Example with sources' --subtitle 'Time' --countname ticks > path_to_svg
 ```
 
-![AllSources](https://github.com/marcin-rzeznicki/stackcollapse-ghc/tree/master/examples/allSrc.svg)
+![AllSources](./examples/allSrc.svg)
 
 ## All options
 
