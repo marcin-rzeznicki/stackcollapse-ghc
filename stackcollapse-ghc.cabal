@@ -3,6 +3,47 @@ name:                stackcollapse-ghc
 version:             0.0.1
 synopsis:            Program to fold GHC prof files into flamegraph input
 description:         Program to fold GHC prof files into flamegraph input
+
+                     The reasons why this package exists despite other packages with similar functionality (not including the NIH syndrome) boil down to:
+                     .
+                     * it does only one thing (stack collapsing), so it's up to the user to install flamegraph scripts, pass options etc (in my eyes it's not a limitation, on the contrary),
+                     .
+                     * output control: annotations (color profiles), extending traces from a configured set of modules with the source locations or toggling qualified names,
+                     .
+                     * precise ticks and/or bytes with @-p@ reports,
+                     .
+                     * it's fast
+                     
+                     .
+                     = Basic usage
+                     .
+                     == Visualize ticks
+                     .
+
+                     If you have a detailed prof file (@-P@ RTS option)
+                     .
+                     > stackcollapse-ghc prof_file | flamegraph.pl --title 'Example' --subtitle 'Time' --countname ticks > path_to_svg
+                     .
+
+                     If you have a standard prof file (@-p@ RTS option)
+                     .
+                     > stackcollapse-ghc -p prof_file | flamegraph.pl --title 'Example' --subtitle 'Time' --countname ticks > path_to_svg
+                     .
+
+                     . 
+                     == Visualize allocations
+                     . 
+                     If you have a detailed prof file (@-P@ RTS option)
+                     .
+                     > stackcollapse-ghc --alloc prof_file | flamegraph.pl --title 'Example' --subtitle 'Bytes allocated' --countname bytes > path_to_svg
+                     .
+
+                     If you have a standard prof file (@-p@ RTS option)
+                     .
+                     > stackcollapse-ghc --alloc -p prof_file | flamegraph.pl --title 'Example' --subtitle 'Bytes allocated' --countname bytes > path_to_svg
+                     .
+
+                     See the full [README](https://github.com/marcin-rzeznicki/stackcollapse-ghc) for details.
 homepage:            https://github.com/marcin-rzeznicki/stackcollapse-ghc
 bug-reports:         https://github.com/marcin-rzeznicki/stackcollapse-ghc/issues
 license:             GPL-3.0-only
