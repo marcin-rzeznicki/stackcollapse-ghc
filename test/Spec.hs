@@ -73,6 +73,11 @@ main = hspec
     context "wrong input type (-p given but the file is -P)"
       $ stackCollapseTest "semiprimes"
       $ defaultConfig { inputType = Standard }
+    context "malformed indentation"
+      $ withConfigs
+        "malformed-file"
+        [ defaultConfig { inputType = Standard }
+        , defaultConfig { inputType = Standard, operationMode = Alloc }]
 
 withConfigs :: String -> [StackCollapseConfig] -> Spec
 withConfigs fileStem = mapM_ (stackCollapseTest fileStem)
@@ -100,6 +105,3 @@ compareWithGold stem opts bs =
 prepareTest :: String -> StackCollapseConfig -> IO StackCollapse
 prepareTest stem opts = let profFilePath = path_ProfFile stem
                         in stackCollapseFromPath opts profFilePath
-
-
-

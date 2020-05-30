@@ -63,7 +63,7 @@ callTreeBuilder format opMode = FoldM
       | level > depth = return (callTree, Skipping depth)
     build callTree (lineNumber, Row { level, columns }) _ = do
       (trace, inherited) <- format' lineNumber columns
-      a <- insertTrace trace level callTree
+      a <- insertTrace' lineNumber trace level callTree
       let s = if skip inherited
               then Skipping level
               else Building
@@ -74,6 +74,9 @@ callTreeBuilder format opMode = FoldM
       Alloc -> (== 0.0) . inheritedAlloc
 
     format' lineNumber = left (printErrorLocation lineNumber ++) . format
+
+    insertTrace' lineNumber trace level =
+      left (printErrorLocation lineNumber ++) . insertTrace trace level
 
     printErrorLocation
       lineNumber = "confused at line " ++ show lineNumber ++ ": "
@@ -95,5 +98,3 @@ splitLine line = Row { level = Char8.length ident, columns = splitLine' rest }
                in nli:splitLine' bs'
         _   -> let (column, bs') = Char8.break (== ' ') bs
                in column:splitLine' bs'
-
-

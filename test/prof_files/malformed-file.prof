@@ -1,0 +1,219 @@
+	Sun May 24 19:22 2020 Time and Allocation Profiling Report  (Final)
+
+	   prog-exe +RTS -i0.001 -ki64k -pocountSemiprimes -s -p -RTS countSemiprimes
+
+	total time  =        0.30 secs   (301 ticks @ 1000 us, 1 processor)
+	total alloc = 504,592,280 bytes  (excludes profiling overheads)
+
+COST CENTRE                    MODULE                        SRC                                        %time %alloc
+
+unionBy.loop                   Data.List.Ordered             Data/List/Ordered.hs:(237,6)-(243,34)       71.4   91.9
+union                          Data.List.Ordered             Data/List/Ordered.hs:231:1-23               22.3    0.0
+countSemiprimes.noOfSemiprimes Example                       src/Example.hs:(15,5)-(17,22)                1.7    1.3
+basicUnsafeWrite               Data.Vector.Primitive.Mutable Data/Vector/Primitive/Mutable.hs:124:3-69    1.3    0.5
+>>=                            Data.Vector.Fusion.Util       Data/Vector/Fusion/Util.hs:36:3-18           0.3    1.7
+
+
+                                                                                                                                                   individual      inherited
+COST CENTRE                            MODULE                            SRC                                                   no.      entries  %time %alloc   %time %alloc
+
+MAIN                                   MAIN                              <built-in>                                            1433          0    0.0    0.0   100.0  100.0
+ CAF                                   GHC.Conc.Signal                   <entire-module>                                       1547          0    0.0    0.0     0.0    0.0
+ CAF                                   GHC.IO.Encoding                   <entire-module>                                       1531          0    0.0    0.0     0.0    0.0
+ CAF                                   GHC.IO.Encoding.Iconv             <entire-module>                                       1529          0    0.0    0.0     0.0    0.0
+ CAF                                   GHC.IO.Handle.FD                  <entire-module>                                       1521          0    0.0    0.0     0.0    0.0
+ CAF                                   GHC.Event.Thread                  <entire-module>                                       1481          0    0.0    0.0     0.0    0.0
+ CAF                                   GHC.Event.Poll                    <entire-module>                                       1451          0    0.0    0.0     0.0    0.0
+ CAF:$fApplicativeBox_$cpure           Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:45:3-6                     2783          0    0.0    0.0     0.0    0.0
+  pure                                 Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:45:3-12                    3039          1    0.0    0.0     0.0    0.0
+ CAF:$fApplicativeId4                  Data.Vector.Fusion.Util           <no location info>                                    2780          0    0.0    0.0     0.0    0.0
+  pure                                 Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:31:3-11                    3023          1    0.0    0.0     0.0    0.0
+ CAF:$fMonadBox_$creturn               Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:49:3-8                     2784          0    0.0    0.0     0.0    0.0
+  return                               Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:49:3-15                    3038          1    0.0    0.0     0.0    0.0
+ CAF:$fMonadId1                        Data.Vector.Fusion.Util           <no location info>                                    2782          0    0.0    0.0     0.0    0.0
+  return                               Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:35:3-15                    3022          1    0.0    0.0     0.0    0.0
+ CAF:$fPrimMonadST1_r5gX               Control.Monad.Primitive           <no location info>                                    2209          0    0.0    0.0     0.0    0.0
+  primitive                            Control.Monad.Primitive           Control/Monad/Primitive.hs:205:3-16                   3029          1    0.0    0.0     0.0    0.0
+ CAF:doBoundsChecks                    Data.Vector.Internal.Check        Data/Vector/Internal/Check.hs:55:1-14                 2785          0    0.0    0.0     0.0    0.0
+  doBoundsChecks                       Data.Vector.Internal.Check        Data/Vector/Internal/Check.hs:55:1-21                 2883          1    0.0    0.0     0.0    0.0
+ CAF:doInternalChecks                  Data.Vector.Internal.Check        Data/Vector/Internal/Check.hs:71:1-16                 2787          0    0.0    0.0     0.0    0.0
+  doInternalChecks                     Data.Vector.Internal.Check        Data/Vector/Internal/Check.hs:71:1-24                 3009          1    0.0    0.0     0.0    0.0
+ CAF:doUnsafeChecks                    Data.Vector.Internal.Check        Data/Vector/Internal/Check.hs:64:1-14                 2786          0    0.0    0.0     0.0    0.0
+  doUnsafeChecks                       Data.Vector.Internal.Check        Data/Vector/Internal/Check.hs:64:1-22                 2887          1    0.0    0.0     0.0    0.0
+ CAF:empty                             Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:131:1-5                 1596          0    0.0    0.0     0.0    0.0
+  empty                                Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:131:1-13                2961          1    0.0    0.0     0.0    0.0
+ CAF:findMin                           Data.PQueue.Prio.Min              Data/PQueue/Prio/Min.hs:189:1-7                       1628          0    0.0    0.0     0.0    0.0
+  findMin                              Data.PQueue.Prio.Min              Data/PQueue/Prio/Min.hs:189:1-78                      2955          1    0.0    0.0     0.0    0.0
+ CAF:lvl60_rful                        Example                           <no location info>                                    2820          0    0.0    0.0     0.0    0.0
+  countSemiprimes                      Example                           src/Example.hs:(12,1)-(17,22)                         2891          0    0.0    0.0     0.0    0.0
+   countSemiprimes.noOfSemiprimes      Example                           src/Example.hs:(15,5)-(17,22)                         2892          0    0.0    0.0     0.0    0.0
+    isNSemiprime                       Example                           src/Example.hs:(20,1)-(25,25)                         2893          0    0.0    0.0     0.0    0.0
+     basicUnsafeNew                    Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:354:3-55                  2894          0    0.0    0.0     0.0    0.0
+      basicUnsafeNew                   Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:(105,3)-(111,37)     2895          0    0.0    0.0     0.0    0.0
+       basicUnsafeNew.mx               Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:111:7-37             2896          0    0.0    0.0     0.0    0.0
+ CAF:main1                             Main                              <no location info>                                    2864          0    0.0    0.0     0.0    0.0
+  main                                 Main                              app/Main.hs:10:1-22                                   2866          1    0.0    0.0     0.0    0.0
+ CAF:nextComposite_rfu0                Example                           src/Example.hs:45:5-17                                2811          0    0.0    0.0     0.0    0.0
+  primes                               Example                           src/Example.hs:(61,1)-(117,55)                        2950          0    0.0    0.0     0.0    0.0
+   primes.large                        Example                           src/Example.hs:65:5-37                                2951          0    0.0    0.0     0.0    0.0
+    sieve                              Example                           src/Example.hs:(40,1)-(58,53)                         2952          0    0.0    0.0     0.0    0.0
+     sieve.nextComposite               Example                           src/Example.hs:45:5-36                                2953          1    0.0    0.0     0.0    0.0
+ CAF:primesTo10                        Example                           <no location info>                                    2810          0    0.0    0.0     0.0    0.1
+   primes                               Example                           src/Example.hs:(61,1)-(117,55)                        2942          0    0.0    0.0     0.0    0.1
+    primes.large                        Example                           src/Example.hs:65:5-37                                2943          0    0.0    0.0     0.0    0.1
+     primes.spin                        Example                           src/Example.hs:117:5-55                               2944       5717    0.0    0.1     0.0    0.1
+ CAF:primesTo8                         Example                           <no location info>                                    2814          0    0.0    0.0     1.0    1.9
+  primes                               Example                           src/Example.hs:(61,1)-(117,55)                        2939          0    0.0    0.0     1.0    1.9
+   primes.large                        Example                           src/Example.hs:65:5-37                                2940          0    0.0    0.0     1.0    1.9
+    sieve                              Example                           src/Example.hs:(40,1)-(58,53)                         2941          1    0.0    0.0     1.0    1.9
+     sieve.sieve'                      Example                           src/Example.hs:(49,5)-(52,46)                         2945       5716    0.0    0.1     1.0    1.9
+      sieve.adjust                     Example                           src/Example.hs:(54,5)-(58,53)                         2966       6524    0.3    0.0     0.7    1.5
+       sieve.adjust.(...)              Example                           src/Example.hs:58:9-53                                2968       6524    0.0    0.0     0.3    1.3
+        deleteFindMin                  Data.PQueue.Prio.Min              Data/PQueue/Prio/Min.hs:198:1-98                      2969       6524    0.0    0.0     0.3    1.3
+         minViewWithKey                Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(209,1)-(210,70)        2970       6524    0.0    0.0     0.3    1.3
+          extractHeap                  Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(312,1)-(314,48)        2975       3566    0.0    0.0     0.3    1.3
+           extractForest               Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(354,1)-(363,27)        2976      42471    0.3    0.7     0.3    1.2
+            incrExtract                Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(345,1)-(348,54)        2986      31818    0.0    0.1     0.0    0.5
+             incr                      Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(297,1)-(300,50)        2991      23574    0.0    0.4     0.0    0.4
+              meld                     Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(269,1)-(271,46)        2992      11640    0.0    0.0     0.0    0.0
+             meld                      Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(269,1)-(271,46)        2990      11934    0.0    0.0     0.0    0.0
+            extractForest.<?           Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:363:5-27                2985      16714    0.0    0.0     0.0    0.0
+       sieve.adjust.n                  Example                           src/Example.hs:58:9-53                                2967       6524    0.0    0.0     0.0    0.0
+       sieve.adjust.facts              Example                           src/Example.hs:58:9-53                                2987       3566    0.0    0.0     0.0    0.0
+       sieve.adjust.table'             Example                           src/Example.hs:58:9-53                                2974       3566    0.0    0.0     0.0    0.0
+       sieve.reinsert                  Example                           src/Example.hs:47:5-56                                2971       3566    0.0    0.0     0.0    0.2
+        insert                         Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:150:1-21                2972       3566    0.0    0.1     0.0    0.2
+         insert'                       Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(169,1)-(172,59)        2973       3566    0.0    0.0     0.0    0.1
+          incr                         Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(297,1)-(300,50)        2989       7104    0.0    0.1     0.0    0.1
+           meld                        Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(269,1)-(271,46)        2993       3539    0.0    0.0     0.0    0.0
+          tip                          Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:265:1-28                2988       3565    0.0    0.0     0.0    0.0
+      sieve.crossoff                   Example                           src/Example.hs:43:5-68                                2963       2757    0.0    0.1     0.3    0.3
+       insert                          Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:150:1-21                2964       2757    0.3    0.0     0.3    0.1
+        insert'                        Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(169,1)-(172,59)        2965       2757    0.0    0.0     0.0    0.1
+         incr                          Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(297,1)-(300,50)        2978       5508    0.0    0.1     0.0    0.1
+          meld                         Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(269,1)-(271,46)        2979       2751    0.0    0.0     0.0    0.0
+         tip                           Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:265:1-28                2977       2757    0.0    0.0     0.0    0.0
+     sieve.crossoff                    Example                           src/Example.hs:43:5-68                                2958          1    0.0    0.0     0.0    0.0
+      insert                           Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:150:1-21                2959          1    0.0    0.0     0.0    0.0
+       insert'                         Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(169,1)-(172,59)        2960          1    0.0    0.0     0.0    0.0
+        singleton                      Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:145:1-31                2962          1    0.0    0.0     0.0    0.0
+     sieve.nextComposite               Example                           src/Example.hs:45:5-36                                2954          0    0.0    0.0     0.0    0.0
+      findMin                          Data.PQueue.Prio.Min              Data/PQueue/Prio/Min.hs:189:1-78                      2956          0    0.0    0.0     0.0    0.0
+       getMin                          Data.PQueue.Prio.Internals        Data/PQueue/Prio/Internals.hs:(190,1)-(191,32)        2957       5716    0.0    0.0     0.0    0.0
+ CAF:primesTo_$sprimes                 Example                           src/Example.hs:61:1-6                                 2815          0    0.0    0.0     0.0    0.0
+  primes                               Example                           src/Example.hs:(61,1)-(117,55)                        2922          1    0.0    0.0     0.0    0.0
+   primes.large                        Example                           src/Example.hs:65:5-37                                2938          1    0.0    0.0     0.0    0.0
+   primes.small                        Example                           src/Example.hs:63:5-24                                2923          1    0.0    0.0     0.0    0.0
+ CAF:primesTo_wheel2357                Example                           src/Example.hs:67:5-13                                2809          0    0.0    0.0     0.0    0.0
+  primes                               Example                           src/Example.hs:(61,1)-(117,55)                        2946          0    0.0    0.0     0.0    0.0
+   primes.wheel2357                    Example                           src/Example.hs:(67,5)-(115,11)                        2947          1    0.0    0.0     0.0    0.0
+ CAF:primesTo_xs'                      Example                           <no location info>                                    2808          0    0.0    0.0     0.0    0.0
+  primes                               Example                           src/Example.hs:(61,1)-(117,55)                        2948          0    0.0    0.0     0.0    0.0
+   primes.wheel2357                    Example                           src/Example.hs:(67,5)-(115,11)                        2949          0    0.0    0.0     0.0    0.0
+ CAF:run1                              Main                              <no location info>                                    2861          0    0.0    0.0     0.0    0.0
+  run                                  Main                              app/Main.hs:(13,1)-(24,17)                            2869          0    0.0    0.0     0.0    0.0
+   profile                             Main                              app/Main.hs:27:1-65                                   2870          1    0.0    0.0     0.0    0.0
+ CAF:run2                              Main                              <no location info>                                    2860          0    0.0    0.0     0.0    0.0
+  run                                  Main                              app/Main.hs:(13,1)-(24,17)                            2872          0    0.0    0.0     0.0    0.0
+   profile                             Main                              app/Main.hs:27:1-65                                   2873          0    0.0    0.0     0.0    0.0
+ CAF:run32                             Main                              <no location info>                                    2858          0    0.0    0.0     5.3    5.4
+  run                                  Main                              app/Main.hs:(13,1)-(24,17)                            2877          0    0.0    0.0     5.3    5.4
+   countSemiprimes                     Example                           src/Example.hs:(12,1)-(17,22)                         2880          1    0.0    0.0     5.3    5.4
+    countSemiprimes.noOfSemiprimes     Example                           src/Example.hs:(15,5)-(17,22)                         2885          1    1.7    1.3     5.3    5.4
+     >>=                               Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:36:3-18                    3021     200011    0.3    1.7     2.7    2.8
+      fmap                             Data.Vector.Fusion.Stream.Monadic Data/Vector/Fusion/Stream/Monadic.hs:(133,3)-(135,20) 3024      50004    0.7    0.6     2.3    1.0
+       basicUnsafeWrite                Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:241:1480-1538             3025      50002    0.0    0.0     1.7    0.4
+        basicUnsafeWrite               Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:124:3-69             3026      50002    1.3    0.4     1.7    0.4
+         primitive                     Control.Monad.Primitive           Control/Monad/Primitive.hs:205:3-16                   3030          0    0.3    0.0     0.3    0.0
+          writeByteArray#              Data.Primitive.Types              Data/Primitive/Types.hs:263:433-499                   3031      50002    0.0    0.0     0.0    0.0
+      countSemiprimes.noOfSemiprimes.\ Example                           src/Example.hs:16:40-64                               3041      50001    0.0    0.0     0.0    0.0
+     unId                              Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                   3020      50004    0.0    0.0     0.0    0.0
+     basicUnsafeSlice                  Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:241:1016-1084             3027      50003    0.0    0.0     0.0    0.3
+      basicUnsafeSlice                 Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:(94,3)-(95,25)       3028      50003    0.0    0.3     0.0    0.3
+     basicUnsafeIndexM                 Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:376:3-73                  3035      50001    0.0    0.0     1.0    0.7
+      >>=                              Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:50:3-19                    3040      50001    0.7    0.4     0.7    0.4
+      basicUnsafeIndexM                Data.Vector.Primitive             Data/Vector/Primitive.hs:234:3-75                     3036      50001    0.3    0.3     0.3    0.3
+       indexByteArray#                 Data.Primitive.Types              Data/Primitive/Types.hs:251:220-288                   3037      50001    0.0    0.0     0.0    0.0
+     +                                 Data.Vector.Fusion.Bundle.Size    Data/Vector/Fusion/Bundle/Size.hs:(26,3)-(32,29)      3008          1    0.0    0.0     0.0    0.0
+     basicLength                       Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:374:3-42                  3004          1    0.0    0.0     0.0    0.0
+      basicLength                      Data.Vector.Primitive             Data/Vector/Primitive.hs:228:3-32                     3005          1    0.0    0.0     0.0    0.0
+     basicUnsafeFreeze                 Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:242:508-575               3050          1    0.0    0.0     0.0    0.0
+      basicUnsafeFreeze                Data.Vector.Primitive             Data/Vector/Primitive.hs:(220,3)-(221,51)             3051          1    0.0    0.0     0.0    0.0
+       primitive                       Control.Monad.Primitive           Control/Monad/Primitive.hs:205:3-16                   3052          1    0.0    0.0     0.0    0.0
+     basicUnsafeNew                    Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:241:1176-1228             3010          1    0.0    0.0     0.0    0.1
+      basicUnsafeNew                   Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:(105,3)-(111,37)     3011          1    0.0    0.0     0.0    0.1
+       basicUnsafeNew.mx               Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:111:7-37             3012          1    0.0    0.0     0.0    0.0
+       basicUnsafeNew.size             Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:110:7-36             3013          1    0.0    0.0     0.0    0.0
+        sizeOf                         Data.Primitive.Types              Data/Primitive/Types.hs:131:1-25                      3014          1    0.0    0.0     0.0    0.0
+         sizeOf#                       Data.Primitive.Types              Data/Primitive/Types.hs:263:68-95                     3015          1    0.0    0.0     0.0    0.0
+          unI#                         Data.Primitive.Types              Data/Primitive/Types.hs:246:1-17                      3016          1    0.0    0.0     0.0    0.0
+       primitive                       Control.Monad.Primitive           Control/Monad/Primitive.hs:205:3-16                   3018          1    0.0    0.1     0.0    0.1
+     isNSemiprime                      Example                           src/Example.hs:(20,1)-(25,25)                         2886          1    0.0    0.0     0.0    0.2
+      isNSemiprime.\                   Example                           src/Example.hs:24:30-57                               2925      12110    0.0    0.0     0.0    0.1
+       basicUnsafeWrite                Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:358:3-72                  2926      12110    0.0    0.0     0.0    0.1
+        basicUnsafeWrite               Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:124:3-69             2927      12110    0.0    0.1     0.0    0.1
+         primitive                     Control.Monad.Primitive           Control/Monad/Primitive.hs:205:3-16                   2928      12110    0.0    0.0     0.0    0.0
+          writeByteArray#              Data.Primitive.Types              Data/Primitive/Types.hs:251:445-514                   2929      12110    0.0    0.0     0.0    0.0
+      basicInitialize                  Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:355:3-51                  2908          1    0.0    0.0     0.0    0.0
+       basicInitialize                 Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:(114,3)-(117,36)     2909          1    0.0    0.0     0.0    0.0
+        basicInitialize.size           Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:117:7-36             2910          1    0.0    0.0     0.0    0.0
+         sizeOf                        Data.Primitive.Types              Data/Primitive/Types.hs:131:1-25                      2911          1    0.0    0.0     0.0    0.0
+          sizeOf#                      Data.Primitive.Types              Data/Primitive/Types.hs:251:70-99                     2912          1    0.0    0.0     0.0    0.0
+           unI#                        Data.Primitive.Types              Data/Primitive/Types.hs:246:1-17                      2913          1    0.0    0.0     0.0    0.0
+        primitive                      Control.Monad.Primitive           Control/Monad/Primitive.hs:205:3-16                   2914          1    0.0    0.0     0.0    0.0
+         setByteArray#                 Data.Primitive.Types              Data/Primitive/Types.hs:251:521-878                   2915          1    0.0    0.0     0.0    0.0
+          internal                     Control.Monad.Primitive           Control/Monad/Primitive.hs:96:3-21                    2916          1    0.0    0.0     0.0    0.0
+          setByteArray#.i              Data.Primitive.Types              Data/Primitive/Types.hs:251:596-619                   2917          1    0.0    0.0     0.0    0.0
+          setByteArray#.n              Data.Primitive.Types              Data/Primitive/Types.hs:251:660-683                   2918          1    0.0    0.0     0.0    0.0
+      basicUnsafeFreeze                Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:372:3-70                  3001          1    0.0    0.0     0.0    0.0
+       basicUnsafeFreeze               Data.Vector.Primitive             Data/Vector/Primitive.hs:(220,3)-(221,51)             3002          1    0.0    0.0     0.0    0.0
+        primitive                      Control.Monad.Primitive           Control/Monad/Primitive.hs:205:3-16                   3003          1    0.0    0.0     0.0    0.0
+      basicUnsafeNew                   Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:354:3-55                  2888          1    0.0    0.0     0.0    0.0
+       basicUnsafeNew                  Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:(105,3)-(111,37)     2889          1    0.0    0.0     0.0    0.0
+        basicUnsafeNew.mx              Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:111:7-37             2890          1    0.0    0.0     0.0    0.0
+        primitive                      Control.Monad.Primitive           Control/Monad/Primitive.hs:205:3-16                   2907          1    0.0    0.0     0.0    0.0
+      isNSemiprime.nSemiprimes         Example                           src/Example.hs:23:9-40                                2919          1    0.0    0.0     0.0    0.1
+       semiprimesTo                    Example                           src/Example.hs:28:1-52                                2920          1    0.0    0.1     0.0    0.1
+     sChunks                           Data.Vector.Fusion.Bundle.Monadic Data/Vector/Fusion/Bundle/Monadic.hs:122:30-36        3019          1    0.0    0.0     0.0    0.0
+     sSize                             Data.Vector.Fusion.Bundle.Monadic Data/Vector/Fusion/Bundle/Monadic.hs:124:30-34        3007          1    0.0    0.0     0.0    0.0
+     upperBound                        Data.Vector.Fusion.Bundle.Size    Data/Vector/Fusion/Bundle/Size.hs:(126,1)-(128,30)    3006          1    0.0    0.0     0.0    0.0
+   profile                             Main                              app/Main.hs:27:1-65                                   2878          0    0.0    0.0     0.0    0.0
+    program                            Main                              app/Main.hs:27:63-65                                  2879          0    0.0    0.0     0.0    0.0
+ CAF:run37                             Main                              <no location info>                                    2862          0    0.0    0.0     0.0    0.0
+ CAF:run_x                             Main                              <no location info>                                    2859          0    0.0    0.0     0.0    0.0
+  run                                  Main                              app/Main.hs:(13,1)-(24,17)                            2874          0    0.0    0.0     0.0    0.0
+   countSemiprimes                     Example                           src/Example.hs:(12,1)-(17,22)                         2881          0    0.0    0.0     0.0    0.0
+    countSemiprimes.\                  Example                           src/Example.hs:13:23-67                               2882          9    0.0    0.0     0.0    0.0
+     unId                              Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                   2884         36    0.0    0.0     0.0    0.0
+     basicLength                       Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:242:664-703               3053         18    0.0    0.0     0.0    0.0
+      basicLength                      Data.Vector.Primitive             Data/Vector/Primitive.hs:228:3-32                     3054         18    0.0    0.0     0.0    0.0
+     basicUnsafeIndexM                 Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:242:817-872               3055         18    0.0    0.0     0.0    0.0
+      basicUnsafeIndexM                Data.Vector.Primitive             Data/Vector/Primitive.hs:234:3-75                     3056         18    0.0    0.0     0.0    0.0
+       indexByteArray#                 Data.Primitive.Types              Data/Primitive/Types.hs:263:214-279                   3057         18    0.0    0.0     0.0    0.0
+   profile                             Main                              app/Main.hs:27:1-65                                   2875          0    0.0    0.0     0.0    0.0
+    program                            Main                              app/Main.hs:27:63-65                                  2876          1    0.0    0.0     0.0    0.0
+ CAF:sIZEOF_INT                        Data.Primitive.MachDeps           Data/Primitive/MachDeps.hs:71:1-10                    2178          0    0.0    0.0     0.0    0.0
+  sIZEOF_INT                           Data.Primitive.MachDeps           Data/Primitive/MachDeps.hs:71:1-14                    3017          1    0.0    0.0     0.0    0.0
+ CAF:sIZEOF_WORD8                      Data.Primitive.MachDeps           Data/Primitive/MachDeps.hs:95:1-12                    2194          0    0.0    0.0     0.0    0.0
+  sIZEOF_WORD8                         Data.Primitive.MachDeps           Data/Primitive/MachDeps.hs:95:1-16                    2906          1    0.0    0.0     0.0    0.0
+ CAF:semiprimes_$ssemiprimes           Example                           src/Example.hs:31:1-10                                2817          0    0.0    0.0    93.7   92.5
+  semiprimes                           Example                           src/Example.hs:(31,1)-(33,51)                         2921          1    0.0    0.1    93.7   92.5
+   semiprimes.\                        Example                           src/Example.hs:31:29-58                               2924       2763    0.0    0.0    93.7   92.4
+    semiprimes.facts                   Example                           src/Example.hs:33:5-51                                2933       2762    0.0    0.3     0.0    0.5
+     primesTo                          Example                           src/Example.hs:36:1-44                                2934       2762    0.0    0.2     0.0    0.2
+    union                              Data.List.Ordered                 Data/List/Ordered.hs:231:1-23                         2930       2762   22.3    0.0    93.7   91.9
+      unionBy                           Data.List.Ordered                 Data/List/Ordered.hs:(235,1)-(243,34)                 2931       2762    0.0    0.0    71.4   91.9
+       unionBy.loop                     Data.List.Ordered                 Data/List/Ordered.hs:(237,6)-(243,34)                 2932    7246750   71.4   91.9    71.4   91.9
+ CAF:size48_rfui                       Example                           <no location info>                                    2819          0    0.0    0.0     0.0    0.0
+  countSemiprimes                      Example                           src/Example.hs:(12,1)-(17,22)                         2897          0    0.0    0.0     0.0    0.0
+   countSemiprimes.noOfSemiprimes      Example                           src/Example.hs:(15,5)-(17,22)                         2898          0    0.0    0.0     0.0    0.0
+    isNSemiprime                       Example                           src/Example.hs:(20,1)-(25,25)                         2899          0    0.0    0.0     0.0    0.0
+     basicUnsafeNew                    Data.Vector.Unboxed.Base          Data/Vector/Unboxed/Base.hs:354:3-55                  2900          0    0.0    0.0     0.0    0.0
+      basicUnsafeNew                   Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:(105,3)-(111,37)     2901          0    0.0    0.0     0.0    0.0
+       basicUnsafeNew.size             Data.Vector.Primitive.Mutable     Data/Vector/Primitive/Mutable.hs:110:7-36             2902          1    0.0    0.0     0.0    0.0
+        sizeOf                         Data.Primitive.Types              Data/Primitive/Types.hs:131:1-25                      2903          1    0.0    0.0     0.0    0.0
+         sizeOf#                       Data.Primitive.Types              Data/Primitive/Types.hs:251:70-99                     2904          1    0.0    0.0     0.0    0.0
+          unI#                         Data.Primitive.Types              Data/Primitive/Types.hs:246:1-17                      2905          1    0.0    0.0     0.0    0.0
+ main                                  Main                              app/Main.hs:10:1-22                                   2867          0    0.0    0.0     0.0    0.0
+  run                                  Main                              app/Main.hs:(13,1)-(24,17)                            2868          1    0.0    0.0     0.0    0.0
+   profile                             Main                              app/Main.hs:27:1-65                                   2871          0    0.0    0.0     0.0    0.0
