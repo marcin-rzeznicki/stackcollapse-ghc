@@ -33,6 +33,7 @@ import qualified Data.ByteString.Char8 as Char8
 import           Data.Text (Text)
 import qualified Data.Text as T
 import           Data.Text.Encoding (decodeUtf8')
+import           Data.Either.Extra (maybeToEither)
 import           Control.Arrow (left)
 import           Text.Read (readMaybe)
 
@@ -78,8 +79,6 @@ readInteger chars = case Char8.readInteger chars of
     _error = Left $ "expected integer in place of '" ++ showText chars ++ "' "
 
 readDouble :: ByteString -> MayFail Double
-readDouble chars = maybe _error Right (readMaybe $ Char8.unpack chars)
+readDouble chars = maybeToEither _error $ readMaybe $ Char8.unpack chars
   where
-    _error = Left $ "expected double in place of '" ++ showText chars ++ "' "
-
-
+    _error = "expected double in place of '" ++ showText chars ++ "' "
