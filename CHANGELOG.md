@@ -3,6 +3,12 @@
 `stackcollapse-ghc` uses [PVP Versioning][1].
 The changelog is available [on GitHub][2].
 
+## 0.0.1.1
+
+* Report line location for all errors.
+* Allow build with foldl > 1.4.6
+
+
 ## 0.0.1
 
 * Initially created.
