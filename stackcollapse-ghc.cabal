@@ -124,7 +124,7 @@ test-suite stackcollapse-ghc-test
   hs-source-dirs:      test
   main-is:             Spec.hs
   other-modules:       Helpers
-  build-depends:       hspec-golden ==0.1.0.1,
+  build-depends:       hspec-golden ==0.1.*,
                        hspec,
                        utf8-string ^>=1.0.1
   ghc-options:         -threaded
