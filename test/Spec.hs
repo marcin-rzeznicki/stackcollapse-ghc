@@ -98,6 +98,7 @@ compareWithGold stem opts bs =
          , readFromFile = Lazy.readFile
          , directory = path_GoldenDir
          , testName
+         , failFirstTime = False
          }
   where
     testName = stem ++ embedInFileName opts
