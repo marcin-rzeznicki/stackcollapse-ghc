@@ -1,3 +1,1 @@
-resolver: nightly-2020-07-15
-extra-deps:
-  - hspec-golden-0.1.0.2@sha256:acf46cd06580e6d9b1097ba9ca5601107a7163e4bc72ca4dae2af702c05bc1e4,1811
+resolver: nightly-2020-07-16
