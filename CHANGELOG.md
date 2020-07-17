@@ -3,6 +3,12 @@
 `stackcollapse-ghc` uses [PVP Versioning][1].
 The changelog is available [on GitHub][2].
 
+## 0.0.1.2
+
+This release does not change functionality
+
+* Rebuild with hspec-golden ==0.1.0.2 and fix `Missing field in record construction failFirstTime` (test suite)
+
 ## 0.0.1.1
 
 * Report line location for all errors.
