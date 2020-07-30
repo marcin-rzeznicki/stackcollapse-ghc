@@ -3,6 +3,12 @@
 `stackcollapse-ghc` uses [PVP Versioning][1].
 The changelog is available [on GitHub][2].
 
+## 0.0.1.3
+
+This release does not change functionality
+
+* Rebuild with recursion-schemes >=5.2 && < 5.3
+
 ## 0.0.1.2
 
 This release does not change functionality
