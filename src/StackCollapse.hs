@@ -28,7 +28,6 @@ module StackCollapse
 import           Trace
 import           Config
 import           UserModule
-import           Orphans
 import           Profiles
 import           CallTree (CallForest)
 import           Data.ByteString.Builder
@@ -40,6 +39,7 @@ import           Data.List (intersperse)
 import           Data.Functor.Foldable
 import           Data.Functor ((<&>))
 import           Control.Applicative (liftA2, liftA3)
+import           Data.Functor.Base (TreeF(..))
 
 data StackCollapse = forall p. Profile p
   => StackCollapse { profile :: p

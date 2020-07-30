@@ -95,7 +95,6 @@ common common-sources
                        Format
                        CallTree
                        CallTreeBuilder
-                       Orphans
                        Profiles
                        StackCollapse
   build-depends:       text >= 1.2.3.0,
@@ -103,7 +102,7 @@ common common-sources
                        rosezipper ==0.2,
                        foldl >= 1.4.6 && < 1.5,
                        transformers ==0.5.6.*,
-                       recursion-schemes ==5.1.3,
+                       recursion-schemes >= 5.2 && < 5.3,
                        safe ==0.3.*,
                        extra
 
