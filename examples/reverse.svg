@@ -1,0 +1,748 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" width="1200" height="278" onload="init(evt)" viewBox="0 0 1200 278" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<!-- Flame graph stack visualization. See https://github.com/brendangregg/FlameGraph for latest version, and http://www.brendangregg.com/flamegraphs.html for examples. -->
+<!-- NOTES:  -->
+<defs>
+	<linearGradient id="background" y1="0" y2="1" x1="0" x2="0" >
+		<stop stop-color="#eeeeee" offset="5%" />
+		<stop stop-color="#eeeeb0" offset="95%" />
+	</linearGradient>
+</defs>
+<style type="text/css">
+	text { font-family:Verdana; font-size:12px; fill:rgb(0,0,0); }
+	#search, #ignorecase { opacity:0.1; cursor:pointer; }
+	#search:hover, #search.show, #ignorecase:hover, #ignorecase.show { opacity:1; }
+	#subtitle { text-anchor:middle; font-color:rgb(160,160,160); }
+	#title { text-anchor:middle; font-size:17px}
+	#unzoom { cursor:pointer; }
+	#frames > *:hover { stroke:black; stroke-width:0.5; cursor:pointer; }
+	.hide { display:none; }
+	.parent { opacity:0.5; }
+</style>
+<script type="text/ecmascript">
+<![CDATA[
+	"use strict";
+	var details, searchbtn, unzoombtn, matchedtxt, svg, searching, currentSearchTerm, ignorecase, ignorecaseBtn;
+	function init(evt) {
+		details = document.getElementById("details").firstChild;
+		searchbtn = document.getElementById("search");
+		ignorecaseBtn = document.getElementById("ignorecase");
+		unzoombtn = document.getElementById("unzoom");
+		matchedtxt = document.getElementById("matched");
+		svg = document.getElementsByTagName("svg")[0];
+		searching = 0;
+		currentSearchTerm = null;
+	}
+
+	window.addEventListener("click", function(e) {
+		var target = find_group(e.target);
+		if (target) {
+			if (target.nodeName == "a") {
+				if (e.ctrlKey === false) return;
+				e.preventDefault();
+			}
+			if (target.classList.contains("parent")) unzoom();
+			zoom(target);
+		}
+		else if (e.target.id == "unzoom") unzoom();
+		else if (e.target.id == "search") search_prompt();
+		else if (e.target.id == "ignorecase") toggle_ignorecase();
+	}, false)
+
+	// mouse-over for info
+	// show
+	window.addEventListener("mouseover", function(e) {
+		var target = find_group(e.target);
+		if (target) details.nodeValue = "Function: " + g_to_text(target);
+	}, false)
+
+	// clear
+	window.addEventListener("mouseout", function(e) {
+		var target = find_group(e.target);
+		if (target) details.nodeValue = ' ';
+	}, false)
+
+	// ctrl-F for search
+	window.addEventListener("keydown",function (e) {
+		if (e.keyCode === 114 || (e.ctrlKey && e.keyCode === 70)) {
+			e.preventDefault();
+			search_prompt();
+		}
+	}, false)
+
+	// ctrl-I to toggle case-sensitive search
+	window.addEventListener("keydown",function (e) {
+		if (e.ctrlKey && e.keyCode === 73) {
+			e.preventDefault();
+			toggle_ignorecase();
+		}
+	}, false)
+
+	// functions
+	function find_child(node, selector) {
+		var children = node.querySelectorAll(selector);
+		if (children.length) return children[0];
+		return;
+	}
+	function find_group(node) {
+		var parent = node.parentElement;
+		if (!parent) return;
+		if (parent.id == "frames") return node;
+		return find_group(parent);
+	}
+	function orig_save(e, attr, val) {
+		if (e.attributes["_orig_" + attr] != undefined) return;
+		if (e.attributes[attr] == undefined) return;
+		if (val == undefined) val = e.attributes[attr].value;
+		e.setAttribute("_orig_" + attr, val);
+	}
+	function orig_load(e, attr) {
+		if (e.attributes["_orig_"+attr] == undefined) return;
+		e.attributes[attr].value = e.attributes["_orig_" + attr].value;
+		e.removeAttribute("_orig_"+attr);
+	}
+	function g_to_text(e) {
+		var text = find_child(e, "title").firstChild.nodeValue;
+		return (text)
+	}
+	function g_to_func(e) {
+		var func = g_to_text(e);
+		// if there's any manipulation we want to do to the function
+		// name before it's searched, do it here before returning.
+		return (func);
+	}
+	function update_text(e) {
+		var r = find_child(e, "rect");
+		var t = find_child(e, "text");
+		var w = parseFloat(r.attributes.width.value) -3;
+		var txt = find_child(e, "title").textContent.replace(/\([^(]*\)$/,"");
+		t.attributes.x.value = parseFloat(r.attributes.x.value) + 3;
+
+		// Smaller than this size won't fit anything
+		if (w < 2 * 12 * 0.59) {
+			t.textContent = "";
+			return;
+		}
+
+		t.textContent = txt;
+		// Fit in full text width
+		if (/^ *$/.test(txt) || t.getSubStringLength(0, txt.length) < w)
+			return;
+
+		for (var x = txt.length - 2; x > 0; x--) {
+			if (t.getSubStringLength(0, x + 2) <= w) {
+				t.textContent = txt.substring(0, x) + "..";
+				return;
+			}
+		}
+		t.textContent = "";
+	}
+
+	// zoom
+	function zoom_reset(e) {
+		if (e.attributes != undefined) {
+			orig_load(e, "x");
+			orig_load(e, "width");
+		}
+		if (e.childNodes == undefined) return;
+		for (var i = 0, c = e.childNodes; i < c.length; i++) {
+			zoom_reset(c[i]);
+		}
+	}
+	function zoom_child(e, x, ratio) {
+		if (e.attributes != undefined) {
+			if (e.attributes.x != undefined) {
+				orig_save(e, "x");
+				e.attributes.x.value = (parseFloat(e.attributes.x.value) - x - 10) * ratio + 10;
+				if (e.tagName == "text")
+					e.attributes.x.value = find_child(e.parentNode, "rect[x]").attributes.x.value + 3;
+			}
+			if (e.attributes.width != undefined) {
+				orig_save(e, "width");
+				e.attributes.width.value = parseFloat(e.attributes.width.value) * ratio;
+			}
+		}
+
+		if (e.childNodes == undefined) return;
+		for (var i = 0, c = e.childNodes; i < c.length; i++) {
+			zoom_child(c[i], x - 10, ratio);
+		}
+	}
+	function zoom_parent(e) {
+		if (e.attributes) {
+			if (e.attributes.x != undefined) {
+				orig_save(e, "x");
+				e.attributes.x.value = 10;
+			}
+			if (e.attributes.width != undefined) {
+				orig_save(e, "width");
+				e.attributes.width.value = parseInt(svg.width.baseVal.value) - (10 * 2);
+			}
+		}
+		if (e.childNodes == undefined) return;
+		for (var i = 0, c = e.childNodes; i < c.length; i++) {
+			zoom_parent(c[i]);
+		}
+	}
+	function zoom(node) {
+		var attr = find_child(node, "rect").attributes;
+		var width = parseFloat(attr.width.value);
+		var xmin = parseFloat(attr.x.value);
+		var xmax = parseFloat(xmin + width);
+		var ymin = parseFloat(attr.y.value);
+		var ratio = (svg.width.baseVal.value - 2 * 10) / width;
+
+		// XXX: Workaround for JavaScript float issues (fix me)
+		var fudge = 0.0001;
+
+		unzoombtn.classList.remove("hide");
+
+		var el = document.getElementById("frames").children;
+		for (var i = 0; i < el.length; i++) {
+			var e = el[i];
+			var a = find_child(e, "rect").attributes;
+			var ex = parseFloat(a.x.value);
+			var ew = parseFloat(a.width.value);
+			var upstack;
+			// Is it an ancestor
+			if (0 == 0) {
+				upstack = parseFloat(a.y.value) > ymin;
+			} else {
+				upstack = parseFloat(a.y.value) < ymin;
+			}
+			if (upstack) {
+				// Direct ancestor
+				if (ex <= xmin && (ex+ew+fudge) >= xmax) {
+					e.classList.add("parent");
+					zoom_parent(e);
+					update_text(e);
+				}
+				// not in current path
+				else
+					e.classList.add("hide");
+			}
+			// Children maybe
+			else {
+				// no common path
+				if (ex < xmin || ex + fudge >= xmax) {
+					e.classList.add("hide");
+				}
+				else {
+					zoom_child(e, xmin, ratio);
+					update_text(e);
+				}
+			}
+		}
+		search();
+	}
+	function unzoom() {
+		unzoombtn.classList.add("hide");
+		var el = document.getElementById("frames").children;
+		for(var i = 0; i < el.length; i++) {
+			el[i].classList.remove("parent");
+			el[i].classList.remove("hide");
+			zoom_reset(el[i]);
+			update_text(el[i]);
+		}
+		search();
+	}
+
+	// search
+	function toggle_ignorecase() {
+		ignorecase = !ignorecase;
+		if (ignorecase) {
+			ignorecaseBtn.classList.add("show");
+		} else {
+			ignorecaseBtn.classList.remove("show");
+		}
+		reset_search();
+		search();
+	}
+	function reset_search() {
+		var el = document.querySelectorAll("#frames rect");
+		for (var i = 0; i < el.length; i++) {
+			orig_load(el[i], "fill")
+		}
+	}
+	function search_prompt() {
+		if (!searching) {
+			var term = prompt("Enter a search term (regexp " +
+			    "allowed, eg: ^ext4_)"
+			    + (ignorecase ? ", ignoring case" : "")
+			    + "\nPress Ctrl-i to toggle case sensitivity", "");
+			if (term != null) {
+				currentSearchTerm = term;
+				search();
+			}
+		} else {
+			reset_search();
+			searching = 0;
+			currentSearchTerm = null;
+			searchbtn.classList.remove("show");
+			searchbtn.firstChild.nodeValue = "Search"
+			matchedtxt.classList.add("hide");
+			matchedtxt.firstChild.nodeValue = ""
+		}
+	}
+	function search(term) {
+		if (currentSearchTerm === null) return;
+		var term = currentSearchTerm;
+
+		var re = new RegExp(term, ignorecase ? 'i' : '');
+		var el = document.getElementById("frames").children;
+		var matches = new Object();
+		var maxwidth = 0;
+		for (var i = 0; i < el.length; i++) {
+			var e = el[i];
+			var func = g_to_func(e);
+			var rect = find_child(e, "rect");
+			if (func == null || rect == null)
+				continue;
+
+			// Save max width. Only works as we have a root frame
+			var w = parseFloat(rect.attributes.width.value);
+			if (w > maxwidth)
+				maxwidth = w;
+
+			if (func.match(re)) {
+				// highlight
+				var x = parseFloat(rect.attributes.x.value);
+				orig_save(rect, "fill");
+				rect.attributes.fill.value = "rgb(230,0,230)";
+
+				// remember matches
+				if (matches[x] == undefined) {
+					matches[x] = w;
+				} else {
+					if (w > matches[x]) {
+						// overwrite with parent
+						matches[x] = w;
+					}
+				}
+				searching = 1;
+			}
+		}
+		if (!searching)
+			return;
+
+		searchbtn.classList.add("show");
+		searchbtn.firstChild.nodeValue = "Reset Search";
+
+		// calculate percent matched, excluding vertical overlap
+		var count = 0;
+		var lastx = -1;
+		var lastw = 0;
+		var keys = Array();
+		for (k in matches) {
+			if (matches.hasOwnProperty(k))
+				keys.push(k);
+		}
+		// sort the matched frames by their x location
+		// ascending, then width descending
+		keys.sort(function(a, b){
+			return a - b;
+		});
+		// Step through frames saving only the biggest bottom-up frames
+		// thanks to the sort order. This relies on the tree property
+		// where children are always smaller than their parents.
+		var fudge = 0.0001;	// JavaScript floating point
+		for (var k in keys) {
+			var x = parseFloat(keys[k]);
+			var w = matches[keys[k]];
+			if (x >= lastx + lastw - fudge) {
+				count += w;
+				lastx = x;
+				lastw = w;
+			}
+		}
+		// display matched percent
+		matchedtxt.classList.remove("hide");
+		var pct = 100 * count / maxwidth;
+		if (pct != 100) pct = pct.toFixed(1)
+		matchedtxt.firstChild.nodeValue = "Matched: " + pct + "%";
+	}
+]]>
+</script>
+<rect x="0.0" y="0" width="1200.0" height="278.0" fill="url(#background)"  />
+<text id="title" x="600.00" y="24" >Reverse</text>
+<text id="details" x="10.00" y="261" > </text>
+<text id="unzoom" x="10.00" y="24" class="hide">Reset Zoom</text>
+<text id="search" x="1090.00" y="24" >Search</text>
+<text id="ignorecase" x="1174.00" y="24" >ic</text>
+<text id="matched" x="1090.00" y="261" > </text>
+<g id="frames">
+<g >
+<title>Example.sieve.reinsert (1 ticks, 0.34%)</title><rect x="1125.8" y="197" width="4.0" height="15.0" fill="rgb(211,177,41)" rx="2" ry="2" />
+<text  x="1128.78" y="207.5" ></text>
+</g>
+<g >
+<title>Example.countSemiprimes (1 ticks, 0.34%)</title><rect x="1173.9" y="181" width="4.1" height="15.0" fill="rgb(226,130,33)" rx="2" ry="2" />
+<text  x="1176.95" y="191.5" ></text>
+</g>
+<g >
+<title>Example.sieve.sieve' (1 ticks, 0.34%)</title><rect x="1125.8" y="165" width="4.0" height="15.0" fill="rgb(244,31,41)" rx="2" ry="2" />
+<text  x="1128.78" y="175.5" ></text>
+</g>
+<g >
+<title>Example.primes.large (4 ticks, 1.36%)</title><rect x="1109.7" y="85" width="16.1" height="15.0" fill="rgb(233,139,33)" rx="2" ry="2" />
+<text  x="1112.73" y="95.5" ></text>
+</g>
+<g >
+<title>Data.Vector.Fusion.Util.&gt;&gt;= (2 ticks, 0.68%)</title><rect x="1149.9" y="165" width="8.0" height="15.0" fill="rgb(225,173,25)" rx="2" ry="2" />
+<text  x="1152.86" y="175.5" ></text>
+</g>
+<g >
+<title>MAIN (1 ticks, 0.34%)</title><rect x="1129.8" y="117" width="4.0" height="15.0" fill="rgb(238,57,32)" rx="2" ry="2" />
+<text  x="1132.80" y="127.5" ></text>
+</g>
+<g >
+<title>Data.Vector.Primitive.Mutable.basicUnsafeWrite (2 ticks, 0.68%)</title><rect x="1149.9" y="213" width="8.0" height="15.0" fill="rgb(247,133,47)" rx="2" ry="2" />
+<text  x="1152.86" y="223.5" ></text>
+</g>
+<g >
+<title>Example.countSemiprimes.noOfSemiprimes (3 ticks, 1.02%)</title><rect x="10.0" y="133" width="12.0" height="15.0" fill="rgb(251,77,15)" rx="2" ry="2" />
+<text  x="13.00" y="143.5" ></text>
+</g>
+<g >
+<title>Example.sieve.sieve' (4 ticks, 1.36%)</title><rect x="1109.7" y="117" width="16.1" height="15.0" fill="rgb(229,13,27)" rx="2" ry="2" />
+<text  x="1112.73" y="127.5" ></text>
+</g>
+<g >
+<title>all (294 ticks, 100%)</title><rect x="10.0" y="229" width="1180.0" height="15.0" fill="rgb(220,22,15)" rx="2" ry="2" />
+<text  x="13.00" y="239.5" ></text>
+</g>
+<g >
+<title>Data.Vector.Fusion.Stream.Monadic.fmap (2 ticks, 0.68%)</title><rect x="1149.9" y="181" width="8.0" height="15.0" fill="rgb(212,83,36)" rx="2" ry="2" />
+<text  x="1152.86" y="191.5" ></text>
+</g>
+<g >
+<title>run (1 ticks, 0.34%)</title><rect x="1129.8" y="149" width="4.0" height="15.0" fill="rgb(215,84,28)" rx="2" ry="2" />
+<text  x="1132.80" y="159.5" ></text>
+</g>
+<g >
+<title>MAIN (1 ticks, 0.34%)</title><rect x="1178.0" y="149" width="4.0" height="15.0" fill="rgb(243,226,47)" rx="2" ry="2" />
+<text  x="1180.96" y="159.5" ></text>
+</g>
+<g >
+<title>MAIN (219 ticks, 74.49%)</title><rect x="230.7" y="117" width="879.0" height="15.0" fill="rgb(214,105,2)" rx="2" ry="2" />
+<text  x="233.75" y="127.5" >MAIN</text>
+</g>
+<g >
+<title>run (3 ticks, 1.02%)</title><rect x="1161.9" y="181" width="12.0" height="15.0" fill="rgb(243,103,41)" rx="2" ry="2" />
+<text  x="1164.90" y="191.5" ></text>
+</g>
+<g >
+<title>MAIN (3 ticks, 1.02%)</title><rect x="10.0" y="69" width="12.0" height="15.0" fill="rgb(219,35,8)" rx="2" ry="2" />
+<text  x="13.00" y="79.5" ></text>
+</g>
+<g >
+<title>Example.semiprimes.\ (219 ticks, 74.49%)</title><rect x="230.7" y="165" width="879.0" height="15.0" fill="rgb(251,119,15)" rx="2" ry="2" />
+<text  x="233.75" y="175.5" >Example.semiprimes.\</text>
+</g>
+<g >
+<title>run (2 ticks, 0.68%)</title><rect x="1149.9" y="117" width="8.0" height="15.0" fill="rgb(224,82,47)" rx="2" ry="2" />
+<text  x="1152.86" y="127.5" ></text>
+</g>
+<g >
+<title>Example.semiprimes (2 ticks, 0.68%)</title><rect x="1182.0" y="181" width="8.0" height="15.0" fill="rgb(220,203,36)" rx="2" ry="2" />
+<text  x="1184.97" y="191.5" ></text>
+</g>
+<g >
+<title>Data.Vector.Unboxed.Base.basicUnsafeIndexM (1 ticks, 0.34%)</title><rect x="1157.9" y="197" width="4.0" height="15.0" fill="rgb(231,90,29)" rx="2" ry="2" />
+<text  x="1160.89" y="207.5" ></text>
+</g>
+<g >
+<title>CAF:run32 (3 ticks, 1.02%)</title><rect x="1161.9" y="165" width="12.0" height="15.0" fill="rgb(244,208,33)" rx="2" ry="2" />
+<text  x="1164.90" y="175.5" ></text>
+</g>
+<g >
+<title>CAF:run32 (2 ticks, 0.68%)</title><rect x="1149.9" y="101" width="8.0" height="15.0" fill="rgb(226,200,52)" rx="2" ry="2" />
+<text  x="1152.86" y="111.5" ></text>
+</g>
+<g >
+<title>MAIN (3 ticks, 1.02%)</title><rect x="1161.9" y="149" width="12.0" height="15.0" fill="rgb(234,118,52)" rx="2" ry="2" />
+<text  x="1164.90" y="159.5" ></text>
+</g>
+<g >
+<title>Example.CAF:semiprimes_$ssemiprimes (2 ticks, 0.68%)</title><rect x="1182.0" y="165" width="8.0" height="15.0" fill="rgb(211,221,45)" rx="2" ry="2" />
+<text  x="1184.97" y="175.5" ></text>
+</g>
+<g >
+<title>Example.primes (1 ticks, 0.34%)</title><rect x="1125.8" y="117" width="4.0" height="15.0" fill="rgb(222,88,38)" rx="2" ry="2" />
+<text  x="1128.78" y="127.5" ></text>
+</g>
+<g >
+<title>Example.CAF:primesTo10 (1 ticks, 0.34%)</title><rect x="1178.0" y="165" width="4.0" height="15.0" fill="rgb(239,144,20)" rx="2" ry="2" />
+<text  x="1180.96" y="175.5" ></text>
+</g>
+<g >
+<title>Example.sieve (1 ticks, 0.34%)</title><rect x="1125.8" y="149" width="4.0" height="15.0" fill="rgb(241,219,53)" rx="2" ry="2" />
+<text  x="1128.78" y="159.5" ></text>
+</g>
+<g >
+<title>MAIN (2 ticks, 0.68%)</title><rect x="1149.9" y="85" width="8.0" height="15.0" fill="rgb(217,133,34)" rx="2" ry="2" />
+<text  x="1152.86" y="95.5" ></text>
+</g>
+<g >
+<title>Data.PQueue.Prio.Min.deleteFindMin (4 ticks, 1.36%)</title><rect x="1109.7" y="165" width="16.1" height="15.0" fill="rgb(237,128,12)" rx="2" ry="2" />
+<text  x="1112.73" y="175.5" ></text>
+</g>
+<g >
+<title>CAF:run32 (1 ticks, 0.34%)</title><rect x="1157.9" y="133" width="4.0" height="15.0" fill="rgb(228,204,48)" rx="2" ry="2" />
+<text  x="1160.89" y="143.5" ></text>
+</g>
+<g >
+<title>Example.countSemiprimes.noOfSemiprimes (1 ticks, 0.34%)</title><rect x="1129.8" y="181" width="4.0" height="15.0" fill="rgb(237,142,0)" rx="2" ry="2" />
+<text  x="1132.80" y="191.5" ></text>
+</g>
+<g >
+<title>Example.sieve.adjust.(...) (4 ticks, 1.36%)</title><rect x="1109.7" y="149" width="16.1" height="15.0" fill="rgb(242,70,9)" rx="2" ry="2" />
+<text  x="1112.73" y="159.5" ></text>
+</g>
+<g >
+<title>Example.countSemiprimes.noOfSemiprimes (3 ticks, 1.02%)</title><rect x="1161.9" y="213" width="12.0" height="15.0" fill="rgb(213,38,4)" rx="2" ry="2" />
+<text  x="1164.90" y="223.5" ></text>
+</g>
+<g >
+<title>Data.PQueue.Prio.Internals.extractHeap (4 ticks, 1.36%)</title><rect x="1109.7" y="197" width="16.1" height="15.0" fill="rgb(234,104,52)" rx="2" ry="2" />
+<text  x="1112.73" y="207.5" ></text>
+</g>
+<g >
+<title>Data.List.Ordered.union (219 ticks, 74.49%)</title><rect x="230.7" y="181" width="879.0" height="15.0" fill="rgb(220,96,40)" rx="2" ry="2" />
+<text  x="233.75" y="191.5" >Data.List.Ordered.union</text>
+</g>
+<g >
+<title>Example.semiprimes.\ (2 ticks, 0.68%)</title><rect x="1182.0" y="197" width="8.0" height="15.0" fill="rgb(238,36,25)" rx="2" ry="2" />
+<text  x="1184.97" y="207.5" ></text>
+</g>
+<g >
+<title>Example.countSemiprimes.noOfSemiprimes (4 ticks, 1.36%)</title><rect x="1133.8" y="197" width="16.1" height="15.0" fill="rgb(247,169,42)" rx="2" ry="2" />
+<text  x="1136.81" y="207.5" ></text>
+</g>
+<g >
+<title>Data.Vector.Fusion.Util.&gt;&gt;= (5 ticks, 1.70%)</title><rect x="1129.8" y="213" width="20.1" height="15.0" fill="rgb(207,29,32)" rx="2" ry="2" />
+<text  x="1132.80" y="223.5" ></text>
+</g>
+<g >
+<title>run (4 ticks, 1.36%)</title><rect x="1133.8" y="165" width="16.1" height="15.0" fill="rgb(250,177,50)" rx="2" ry="2" />
+<text  x="1136.81" y="175.5" ></text>
+</g>
+<g >
+<title>CAF:run32 (1 ticks, 0.34%)</title><rect x="1129.8" y="133" width="4.0" height="15.0" fill="rgb(207,68,40)" rx="2" ry="2" />
+<text  x="1132.80" y="143.5" ></text>
+</g>
+<g >
+<title>Example.countSemiprimes (1 ticks, 0.34%)</title><rect x="1157.9" y="165" width="4.0" height="15.0" fill="rgb(229,142,26)" rx="2" ry="2" />
+<text  x="1160.89" y="175.5" ></text>
+</g>
+<g >
+<title>MAIN (52 ticks, 17.69%)</title><rect x="22.0" y="149" width="208.7" height="15.0" fill="rgb(207,40,34)" rx="2" ry="2" />
+<text  x="25.04" y="159.5" >MAIN</text>
+</g>
+<g >
+<title>Data.Vector.Primitive.Mutable.basicUnsafeWrite (3 ticks, 1.02%)</title><rect x="10.0" y="197" width="12.0" height="15.0" fill="rgb(251,167,26)" rx="2" ry="2" />
+<text  x="13.00" y="207.5" ></text>
+</g>
+<g >
+<title>Example.sieve.adjust (4 ticks, 1.36%)</title><rect x="1109.7" y="133" width="16.1" height="15.0" fill="rgb(207,173,1)" rx="2" ry="2" />
+<text  x="1112.73" y="143.5" ></text>
+</g>
+<g >
+<title>CAF:run32 (1 ticks, 0.34%)</title><rect x="1173.9" y="149" width="4.1" height="15.0" fill="rgb(228,138,15)" rx="2" ry="2" />
+<text  x="1176.95" y="159.5" ></text>
+</g>
+<g >
+<title>Example.sieve.adjust (1 ticks, 0.34%)</title><rect x="1125.8" y="181" width="4.0" height="15.0" fill="rgb(237,180,29)" rx="2" ry="2" />
+<text  x="1128.78" y="191.5" ></text>
+</g>
+<g >
+<title>Data.Vector.Unboxed.Base.basicUnsafeIndexM (1 ticks, 0.34%)</title><rect x="1129.8" y="197" width="4.0" height="15.0" fill="rgb(208,213,2)" rx="2" ry="2" />
+<text  x="1132.80" y="207.5" ></text>
+</g>
+<g >
+<title>MAIN (1 ticks, 0.34%)</title><rect x="1173.9" y="133" width="4.1" height="15.0" fill="rgb(218,24,9)" rx="2" ry="2" />
+<text  x="1176.95" y="143.5" ></text>
+</g>
+<g >
+<title>Data.List.Ordered.union (52 ticks, 17.69%)</title><rect x="22.0" y="213" width="208.7" height="15.0" fill="rgb(244,133,17)" rx="2" ry="2" />
+<text  x="25.04" y="223.5" >Data.List.Ordered.union</text>
+</g>
+<g >
+<title>MAIN (1 ticks, 0.34%)</title><rect x="1157.9" y="117" width="4.0" height="15.0" fill="rgb(211,69,31)" rx="2" ry="2" />
+<text  x="1160.89" y="127.5" ></text>
+</g>
+<g >
+<title>Data.Vector.Primitive.basicUnsafeIndexM (1 ticks, 0.34%)</title><rect x="1157.9" y="213" width="4.0" height="15.0" fill="rgb(247,218,23)" rx="2" ry="2" />
+<text  x="1160.89" y="223.5" ></text>
+</g>
+<g >
+<title>MAIN (4 ticks, 1.36%)</title><rect x="1133.8" y="133" width="16.1" height="15.0" fill="rgb(207,183,29)" rx="2" ry="2" />
+<text  x="1136.81" y="143.5" ></text>
+</g>
+<g >
+<title>run (1 ticks, 0.34%)</title><rect x="1157.9" y="149" width="4.0" height="15.0" fill="rgb(228,211,21)" rx="2" ry="2" />
+<text  x="1160.89" y="159.5" ></text>
+</g>
+<g >
+<title>Example.countSemiprimes (2 ticks, 0.68%)</title><rect x="1149.9" y="133" width="8.0" height="15.0" fill="rgb(221,179,21)" rx="2" ry="2" />
+<text  x="1152.86" y="143.5" ></text>
+</g>
+<g >
+<title>Example.countSemiprimes.noOfSemiprimes (1 ticks, 0.34%)</title><rect x="1173.9" y="197" width="4.1" height="15.0" fill="rgb(216,148,45)" rx="2" ry="2" />
+<text  x="1176.95" y="207.5" ></text>
+</g>
+<g >
+<title>Example.countSemiprimes.noOfSemiprimes (2 ticks, 0.68%)</title><rect x="1149.9" y="149" width="8.0" height="15.0" fill="rgb(212,141,15)" rx="2" ry="2" />
+<text  x="1152.86" y="159.5" ></text>
+</g>
+<g >
+<title>Example.CAF:primesTo8 (4 ticks, 1.36%)</title><rect x="1109.7" y="53" width="16.1" height="15.0" fill="rgb(208,97,26)" rx="2" ry="2" />
+<text  x="1112.73" y="63.5" ></text>
+</g>
+<g >
+<title>Example.countSemiprimes (3 ticks, 1.02%)</title><rect x="1161.9" y="197" width="12.0" height="15.0" fill="rgb(217,73,26)" rx="2" ry="2" />
+<text  x="1164.90" y="207.5" ></text>
+</g>
+<g >
+<title>Example.primes (4 ticks, 1.36%)</title><rect x="1109.7" y="69" width="16.1" height="15.0" fill="rgb(249,1,2)" rx="2" ry="2" />
+<text  x="1112.73" y="79.5" ></text>
+</g>
+<g >
+<title>run (3 ticks, 1.02%)</title><rect x="10.0" y="101" width="12.0" height="15.0" fill="rgb(232,162,4)" rx="2" ry="2" />
+<text  x="13.00" y="111.5" ></text>
+</g>
+<g >
+<title>run (1 ticks, 0.34%)</title><rect x="1173.9" y="165" width="4.1" height="15.0" fill="rgb(223,68,25)" rx="2" ry="2" />
+<text  x="1176.95" y="175.5" ></text>
+</g>
+<g >
+<title>Data.Vector.Unboxed.Base.basicUnsafeWrite (2 ticks, 0.68%)</title><rect x="1149.9" y="197" width="8.0" height="15.0" fill="rgb(229,83,20)" rx="2" ry="2" />
+<text  x="1152.86" y="207.5" ></text>
+</g>
+<g >
+<title>Example.sieve (4 ticks, 1.36%)</title><rect x="1109.7" y="101" width="16.1" height="15.0" fill="rgb(221,74,13)" rx="2" ry="2" />
+<text  x="1112.73" y="111.5" ></text>
+</g>
+<g >
+<title>Example.primes.spin (1 ticks, 0.34%)</title><rect x="1178.0" y="213" width="4.0" height="15.0" fill="rgb(244,30,50)" rx="2" ry="2" />
+<text  x="1180.96" y="223.5" ></text>
+</g>
+<g >
+<title>Data.List.Ordered.unionBy.loop (219 ticks, 74.49%)</title><rect x="230.7" y="213" width="879.0" height="15.0" fill="rgb(205,110,9)" rx="2" ry="2" />
+<text  x="233.75" y="223.5" >Data.List.Ordered.unionBy.loop</text>
+</g>
+<g >
+<title>Data.Vector.Unboxed.Base.basicUnsafeWrite (3 ticks, 1.02%)</title><rect x="10.0" y="181" width="12.0" height="15.0" fill="rgb(227,199,43)" rx="2" ry="2" />
+<text  x="13.00" y="191.5" ></text>
+</g>
+<g >
+<title>Example.CAF:primesTo8 (1 ticks, 0.34%)</title><rect x="1125.8" y="101" width="4.0" height="15.0" fill="rgb(253,172,35)" rx="2" ry="2" />
+<text  x="1128.78" y="111.5" ></text>
+</g>
+<g >
+<title>Example.semiprimes.facts (2 ticks, 0.68%)</title><rect x="1182.0" y="213" width="8.0" height="15.0" fill="rgb(216,117,10)" rx="2" ry="2" />
+<text  x="1184.97" y="223.5" ></text>
+</g>
+<g >
+<title>Data.PQueue.Prio.Internals.extractForest (4 ticks, 1.36%)</title><rect x="1109.7" y="213" width="16.1" height="15.0" fill="rgb(246,108,28)" rx="2" ry="2" />
+<text  x="1112.73" y="223.5" ></text>
+</g>
+<g >
+<title>Example.semiprimes (219 ticks, 74.49%)</title><rect x="230.7" y="149" width="879.0" height="15.0" fill="rgb(251,141,46)" rx="2" ry="2" />
+<text  x="233.75" y="159.5" >Example.semiprimes</text>
+</g>
+<g >
+<title>Example.CAF:semiprimes_$ssemiprimes (52 ticks, 17.69%)</title><rect x="22.0" y="165" width="208.7" height="15.0" fill="rgb(230,160,5)" rx="2" ry="2" />
+<text  x="25.04" y="175.5" >Example.CAF:semiprimes_$sse..</text>
+</g>
+<g >
+<title>Example.semiprimes.\ (52 ticks, 17.69%)</title><rect x="22.0" y="197" width="208.7" height="15.0" fill="rgb(226,174,36)" rx="2" ry="2" />
+<text  x="25.04" y="207.5" >Example.semiprimes.\</text>
+</g>
+<g >
+<title>Example.CAF:semiprimes_$ssemiprimes (219 ticks, 74.49%)</title><rect x="230.7" y="133" width="879.0" height="15.0" fill="rgb(211,220,38)" rx="2" ry="2" />
+<text  x="233.75" y="143.5" >Example.CAF:semiprimes_$ssemiprimes</text>
+</g>
+<g >
+<title>Example.countSemiprimes (1 ticks, 0.34%)</title><rect x="1129.8" y="165" width="4.0" height="15.0" fill="rgb(210,181,9)" rx="2" ry="2" />
+<text  x="1132.80" y="175.5" ></text>
+</g>
+<g >
+<title>Data.Vector.Fusion.Stream.Monadic.fmap (3 ticks, 1.02%)</title><rect x="10.0" y="165" width="12.0" height="15.0" fill="rgb(248,86,8)" rx="2" ry="2" />
+<text  x="13.00" y="175.5" ></text>
+</g>
+<g >
+<title>MAIN (1 ticks, 0.34%)</title><rect x="1125.8" y="85" width="4.0" height="15.0" fill="rgb(224,127,9)" rx="2" ry="2" />
+<text  x="1128.78" y="95.5" ></text>
+</g>
+<g >
+<title>Data.PQueue.Prio.Internals.insert (1 ticks, 0.34%)</title><rect x="1125.8" y="213" width="4.0" height="15.0" fill="rgb(230,83,33)" rx="2" ry="2" />
+<text  x="1128.78" y="223.5" ></text>
+</g>
+<g >
+<title>Example.primes (1 ticks, 0.34%)</title><rect x="1178.0" y="181" width="4.0" height="15.0" fill="rgb(239,17,28)" rx="2" ry="2" />
+<text  x="1180.96" y="191.5" ></text>
+</g>
+<g >
+<title>Data.Vector.Fusion.Util.&gt;&gt;= (3 ticks, 1.02%)</title><rect x="10.0" y="149" width="12.0" height="15.0" fill="rgb(231,45,38)" rx="2" ry="2" />
+<text  x="13.00" y="159.5" ></text>
+</g>
+<g >
+<title>CAF:run32 (4 ticks, 1.36%)</title><rect x="1133.8" y="149" width="16.1" height="15.0" fill="rgb(233,147,0)" rx="2" ry="2" />
+<text  x="1136.81" y="159.5" ></text>
+</g>
+<g >
+<title>Example.isNSemiprime (1 ticks, 0.34%)</title><rect x="1173.9" y="213" width="4.1" height="15.0" fill="rgb(239,2,15)" rx="2" ry="2" />
+<text  x="1176.95" y="223.5" ></text>
+</g>
+<g >
+<title>MAIN (4 ticks, 1.36%)</title><rect x="1109.7" y="37" width="16.1" height="15.0" fill="rgb(215,197,50)" rx="2" ry="2" />
+<text  x="1112.73" y="47.5" ></text>
+</g>
+<g >
+<title>Control.Monad.Primitive.primitive (3 ticks, 1.02%)</title><rect x="10.0" y="213" width="12.0" height="15.0" fill="rgb(206,209,16)" rx="2" ry="2" />
+<text  x="13.00" y="223.5" ></text>
+</g>
+<g >
+<title>MAIN (2 ticks, 0.68%)</title><rect x="1182.0" y="149" width="8.0" height="15.0" fill="rgb(211,193,19)" rx="2" ry="2" />
+<text  x="1184.97" y="159.5" ></text>
+</g>
+<g >
+<title>Example.semiprimes (52 ticks, 17.69%)</title><rect x="22.0" y="181" width="208.7" height="15.0" fill="rgb(212,126,30)" rx="2" ry="2" />
+<text  x="25.04" y="191.5" >Example.semiprimes</text>
+</g>
+<g >
+<title>Data.PQueue.Prio.Internals.minViewWithKey (4 ticks, 1.36%)</title><rect x="1109.7" y="181" width="16.1" height="15.0" fill="rgb(250,199,37)" rx="2" ry="2" />
+<text  x="1112.73" y="191.5" ></text>
+</g>
+<g >
+<title>Example.countSemiprimes.noOfSemiprimes (1 ticks, 0.34%)</title><rect x="1157.9" y="181" width="4.0" height="15.0" fill="rgb(253,185,2)" rx="2" ry="2" />
+<text  x="1160.89" y="191.5" ></text>
+</g>
+<g >
+<title>Example.primes.large (1 ticks, 0.34%)</title><rect x="1125.8" y="133" width="4.0" height="15.0" fill="rgb(251,136,51)" rx="2" ry="2" />
+<text  x="1128.78" y="143.5" ></text>
+</g>
+<g >
+<title>Example.countSemiprimes (3 ticks, 1.02%)</title><rect x="10.0" y="117" width="12.0" height="15.0" fill="rgb(239,20,48)" rx="2" ry="2" />
+<text  x="13.00" y="127.5" ></text>
+</g>
+<g >
+<title>Example.primes.large (1 ticks, 0.34%)</title><rect x="1178.0" y="197" width="4.0" height="15.0" fill="rgb(214,229,34)" rx="2" ry="2" />
+<text  x="1180.96" y="207.5" ></text>
+</g>
+<g >
+<title>Example.countSemiprimes (4 ticks, 1.36%)</title><rect x="1133.8" y="181" width="16.1" height="15.0" fill="rgb(216,109,43)" rx="2" ry="2" />
+<text  x="1136.81" y="191.5" ></text>
+</g>
+<g >
+<title>CAF:run32 (3 ticks, 1.02%)</title><rect x="10.0" y="85" width="12.0" height="15.0" fill="rgb(251,42,17)" rx="2" ry="2" />
+<text  x="13.00" y="95.5" ></text>
+</g>
+<g >
+<title>Data.List.Ordered.unionBy (219 ticks, 74.49%)</title><rect x="230.7" y="197" width="879.0" height="15.0" fill="rgb(215,50,8)" rx="2" ry="2" />
+<text  x="233.75" y="207.5" >Data.List.Ordered.unionBy</text>
+</g>
+</g>
+</svg>

@@ -25,6 +25,7 @@ Table of Contents
     * [Colors](#using-distinct-colors-for-modules)
     * [Qualified names](#turning-off-qualified-names)
     * [Source locations](#adding-source-locations)
+    * [Reverse flamegraphs](#reverse-flamegraphs)
   * [All options](#all-options)
   * [Installation](#installation)
 
@@ -121,6 +122,16 @@ stackcollapse-ghc -S prof_file | flamegraph.pl --title 'Example with sources' --
 ```
 
 ![AllSources](./examples/allSrc.svg)
+
+### "Reverse" flamegraphs
+
+Sometimes it makes sense to to have functions at the bottom and their callers above them. This mode is called "reverse" flamegraph. You can make such graphs with `stackcollapse-ghc` (the real work is done by the `flamegraph` script)
+
+```bash
+stackcollapse-ghc prof_file | flamegraph.pl --reverse --title 'Reverse' --countname ticks > path_to_svg
+```
+
+![Reverse](./examples/reverse.svg)
 
 ## All options
 
