@@ -25,7 +25,9 @@ matrix:
 
   - ghc: 8.10.1
     env: STACK_YAML="$TRAVIS_BUILD_DIR/stack-8.10.1.yaml"
-  
+
+  - ghc: 8.10.2
+    env: STACK_YAML="$TRAVIS_BUILD_DIR/stack-8.10.2.yaml"
 
 install:
   # HLint check
