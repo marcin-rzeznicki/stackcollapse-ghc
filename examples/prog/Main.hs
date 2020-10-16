@@ -1,12 +1,37 @@
-module Example (countSemiprimes, semiprimesTo, semiprimes, primesTo) where
+#!/usr/bin/env stack
+-- stack script --compile --resolver nightly-2020-09-16 --package data-ordlist --package pqueue --package vector --package deepseq
 
+import           System.Environment (getArgs)
+import           Control.DeepSeq
+import           Control.Exception (evaluate)
+import           Control.Monad (void, forM_)
 import qualified Data.PQueue.Prio.Min as PQ
 import           Data.List.Ordered (union)
 import           Data.Vector.Unboxed (Vector, (!))
 import qualified Data.Vector.Unboxed as Vector
 import qualified Data.Vector.Unboxed.Mutable as MVector
-import           Control.Monad (forM_)
 import           Control.Monad.ST
+
+main :: IO ()
+main = getArgs >>= run
+
+run :: [String] -> IO ()
+run ["semiprimes"] = profile semiprimesTo (50000 :: Int)
+run ["countSemiprimes"] = profile
+  (countSemiprimes 50000)
+  [ (1, 26)
+  , (4, 10)
+  , (16, 20)
+  , (1, 100)
+  , (4, 100)
+  , (50, 100)
+  , (90, 100)
+  , (200, 10000)
+  , (300, 10000)]
+run unknownArgs = putStrLn $ "Unknown args " ++ show unknownArgs 
+
+profile :: NFData a => (t -> a) -> t -> IO ()
+profile f a = void $ evaluate $ force $ {-# SCC "program" #-} f a
 
 countSemiprimes :: Int -> [(Int, Int)] -> [Int]
 countSemiprimes
