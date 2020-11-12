@@ -1,5 +1,2 @@
-resolver: nightly-2020-09-16
+resolver: nightly-2020-11-11
 
-extra-deps:
-- recursion-schemes-5.2
-- data-fix-0.3.0
