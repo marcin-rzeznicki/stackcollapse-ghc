@@ -3,6 +3,14 @@
 `stackcollapse-ghc` uses [PVP Versioning][1].
 The changelog is available [on GitHub][2].
 
+## 0.0.1.4
+
+This release does not change functionality
+
+* Rebuild with hspec-golden >=0.2.0.0 && < 0.3
+* Support ghc 8.10.4
+* Do not use deprected `Data.ByteString.Lazy.putStrLn`
+
 ## 0.0.1.3
 
 This release does not change functionality
