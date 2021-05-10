@@ -12,6 +12,7 @@ import           Data.ByteString.Lazy.Char8 (pack)
 import           Data.ByteString.Lazy.UTF8 (toString)
 import           Data.Either.Extra (fromEither)
 import           Control.Arrow (left)
+import           System.FilePath ((</>))
 
 path_ProfFilesDir :: String
 path_ProfFilesDir = "test/prof_files/"
@@ -31,18 +32,18 @@ main = hspec
         [ defaultConfig
         , defaultConfig `prependUserModule` userModuleFromString "Example"
         , defaultConfig { sourceMode = SourceUser }
-            `prependUserModule` userModuleFromString "Example"
+          `prependUserModule` userModuleFromString "Example"
         , defaultConfig { functionNameMode = QualifiedNever }
-            `prependUserModule` userModuleFromString "Example"
+          `prependUserModule` userModuleFromString "Example"
         , defaultConfig { operationMode = Alloc }
-            `prependUserModule` userModuleFromString "Example"]
+          `prependUserModule` userModuleFromString "Example"]
     context "standard prof"
       $ withConfigs
         "countSemiprimes"
         [ defaultConfig { inputType = Standard }
-            `prependUserModule` userModuleFromString "Example"
+          `prependUserModule` userModuleFromString "Example"
         , defaultConfig { inputType = Standard, operationMode = Alloc }
-            `prependUserModule` userModuleFromString "Example"]
+          `prependUserModule` userModuleFromString "Example"]
     context "unicode chars"
       $ withConfigs
         "unicode"
@@ -96,12 +97,18 @@ compareWithGold stem opts bs =
          , encodePretty = toString
          , writeToFile = Lazy.writeFile
          , readFromFile = Lazy.readFile
-         , directory = path_GoldenDir
-         , testName
+         , actualFile
+         , goldenFile
          , failFirstTime = False
          }
   where
     testName = stem ++ embedInFileName opts
+
+    testSpecificDir = path_GoldenDir </> testName
+
+    goldenFile = testSpecificDir </> "golden"
+
+    actualFile = Just $ testSpecificDir </> "actual"
 
 prepareTest :: String -> StackCollapseConfig -> IO StackCollapse
 prepareTest stem opts = let profFilePath = path_ProfFile stem

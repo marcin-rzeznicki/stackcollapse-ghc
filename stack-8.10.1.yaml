@@ -3,3 +3,4 @@ resolver: nightly-2020-08-16
 extra-deps:
 - recursion-schemes-5.2
 - data-fix-0.3.0
+- hspec-golden-0.2.0.0@sha256:395816f942d9386ec7eddda938415d99364118841bff9053bac2457811be8acc,1854

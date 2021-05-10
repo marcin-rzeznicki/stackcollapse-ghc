@@ -1,5 +1,5 @@
 resolver: lts-15.3
 extra-deps:
-  - hspec-golden-0.1.0.2@sha256:acf46cd06580e6d9b1097ba9ca5601107a7163e4bc72ca4dae2af702c05bc1e4,1811
+  - hspec-golden-0.2.0.0@sha256:395816f942d9386ec7eddda938415d99364118841bff9053bac2457811be8acc,1854
   - recursion-schemes-5.2
   - data-fix-0.3.0
