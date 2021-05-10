@@ -27,7 +27,7 @@ import           Data.Functor ((<&>))
 import           Data.Function ((&))
 import           Control.Monad (foldM)
 import           Control.Exception
-import qualified Data.ByteString.Lazy as Lazy
+import qualified Data.ByteString.Lazy.Char8 as Lazy
 
 cmdLineOpts
   :: [OptDescr (StackCollapseConfig -> Either String StackCollapseConfig)]
