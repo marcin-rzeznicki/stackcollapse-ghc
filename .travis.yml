@@ -32,6 +32,9 @@ matrix:
   - ghc: 8.10.3
     env: STACK_YAML="$TRAVIS_BUILD_DIR/stack-8.10.3.yaml"
 
+  - ghc: 8.10.4
+    env: STACK_YAML="$TRAVIS_BUILD_DIR/stack-8.10.4.yaml"
+
 install:
   # HLint check
   - curl -sSL https://raw.github.com/ndmitchell/neil/master/misc/travis.sh | sh -s -- hlint .
