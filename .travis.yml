@@ -1,10 +1,11 @@
+dist: focal
 sudo: true
 language: haskell
 
 git:
   depth: 5
 
-cabal: "2.4"
+cabal: "3.2"
 
 cache:
   directories:
@@ -19,7 +20,7 @@ matrix:
 
   - ghc: 8.8.2
     env: STACK_YAML="$TRAVIS_BUILD_DIR/stack-8.8.2.yaml"
-    
+
   - ghc: 8.8.3
     env: STACK_YAML="$TRAVIS_BUILD_DIR/stack-8.8.3.yaml"
 
@@ -28,7 +29,7 @@ matrix:
 
   - ghc: 8.10.2
     env: STACK_YAML="$TRAVIS_BUILD_DIR/stack-8.10.2.yaml"
-    
+
   - ghc: 8.10.3
     env: STACK_YAML="$TRAVIS_BUILD_DIR/stack-8.10.3.yaml"
 
