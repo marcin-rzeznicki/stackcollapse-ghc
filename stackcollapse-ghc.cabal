@@ -62,13 +62,14 @@ tested-with:         GHC == 8.6.5
                      GHC == 8.10.1
                      GHC == 8.10.2
                      GHC == 8.10.3
+                     GHC == 9.0.1
 
 source-repository head
   type:                git
   location:            https://github.com/marcin-rzeznicki/stackcollapse-ghc.git
 
 common common-options
-  build-depends:       base >= 4.12.0.0 && < 4.15,
+  build-depends:       base >= 4.12.0.0 && < 4.16,
                        bytestring >= 0.10.8
   
   ghc-options:         -Wall

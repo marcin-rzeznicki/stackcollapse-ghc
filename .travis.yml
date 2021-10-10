@@ -5,8 +5,6 @@ language: generic
 git:
   depth: 5
 
-cabal: "3.2"
-
 cache:
   directories:
   - "$HOME/.cabal/store"
@@ -21,11 +19,13 @@ addons:
     - ghc-8.6.5
     - ghc-8.8.3
     - ghc-8.10.4
+    - ghc-9.0.1
 
 env:
 - GHCVER=8.6.5 STACK_YAML="$TRAVIS_BUILD_DIR/stack-8.6.5.yaml"
 - GHCVER=8.8.3 STACK_YAML="$TRAVIS_BUILD_DIR/stack-8.8.3.yaml"
 - GHCVER=8.10.4 STACK_YAML="$TRAVIS_BUILD_DIR/stack-8.10.4.yaml"
+- GHCVER=9.0.1 STACK_YAML="$TRAVIS_BUILD_DIR/stack-9.0.1.yaml"
 
 before_install:
   - export PATH=/opt/ghc/$GHCVER/bin:$PATH
